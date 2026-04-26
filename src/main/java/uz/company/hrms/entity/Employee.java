@@ -5,7 +5,6 @@ import jakarta.validation.constraints.*;
 import uz.company.hrms.enums.Rank;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,7 +79,7 @@ public class Employee {
     @NotNull(message = "Rank assigned date is required")
     @PastOrPresent(message = "Rank assigned date cannot be in the future")
     @Column(name = "rank_assigned_date",nullable = false)
-    private LocalDateTime rankAssignedDate;
+    private LocalDate rankAssignedDate;
 
     /**
      * Taqdirlangan ishhona / mukofotlar soni
@@ -104,16 +103,6 @@ public class Employee {
     @NotNull(message = "Next attestation date is required")
     @Column(name = "next_attestation_date",nullable = false)
     private LocalDate nextAttestationDate;
-
-    @NotNull(message = "Active status is required")
-    @Column(name = "active",nullable = false)
-    private Boolean active=true;
-
-    @Column(name = "created_at",nullable = false,updatable = false)
-    private LocalDateTime createdAt;
-
-    @Column(name = "updated_at")
-    private LocalDateTime updateAt;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id",unique = true,
@@ -143,18 +132,15 @@ public class Employee {
 
     public Employee(){}
 
+    @Column(nullable = false, updatable = false)
+    private LocalDate createdAt;
+
     @PrePersist
     protected void onCreate(){
-        this.createdAt=LocalDateTime.now();
-        this.updateAt=LocalDateTime.now();
+        this.createdAt=LocalDate.now();
     }
 
-    @PreUpdate
-    protected void onUpdate(){
-        this.updateAt=LocalDateTime.now();
-    }
-
-    public Employee(Long id, String fullName, Rank rank, Department department, Position position, LocalDate birthDate, String address, LocalDate employmentDate, LocalDateTime rankAssignedDate, Integer awardCountFromOffice, Integer appreciationCountFromTashkent, LocalDate nextAttestationDate, Boolean active, LocalDateTime createdAt, LocalDateTime updateAt) {
+    public Employee(Long id, String fullName, Rank rank, Department department, Position position, LocalDate birthDate, String address, LocalDate employmentDate, LocalDate rankAssignedDate, Integer awardCountFromOffice, Integer appreciationCountFromTashkent, LocalDate nextAttestationDate, LocalDate createdAt) {
         this.id = id;
         this.fullName = fullName;
         this.rank = rank;
@@ -167,9 +153,7 @@ public class Employee {
         this.awardCountFromOffice = awardCountFromOffice;
         this.appreciationCountFromTashkent = appreciationCountFromTashkent;
         this.nextAttestationDate = nextAttestationDate;
-        this.active = active;
         this.createdAt = createdAt;
-        this.updateAt = updateAt;
     }
 
     public Long getId() {
@@ -232,12 +216,76 @@ public class Employee {
         this.employmentDate = employmentDate;
     }
 
-    public LocalDateTime getRankAssignedDate() {
+    public LocalDate getRankAssignedDate() {
         return rankAssignedDate;
     }
 
-    public void setRankAssignedDate(LocalDateTime rankAssignedDate) {
+    public void setRankAssignedDate(LocalDate rankAssignedDate) {
         this.rankAssignedDate = rankAssignedDate;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public List<Document> getDocuments() {
+        return documents;
+    }
+
+    public void setDocuments(List<Document> documents) {
+        this.documents = documents;
+    }
+
+    public List<VacationSchedule> getVacationSchedules() {
+        return vacationSchedules;
+    }
+
+    public void setVacationSchedules(List<VacationSchedule> vacationSchedules) {
+        this.vacationSchedules = vacationSchedules;
+    }
+
+    public List<SickLeave> getSickLeaves() {
+        return sickLeaves;
+    }
+
+    public void setSickLeaves(List<SickLeave> sickLeaves) {
+        this.sickLeaves = sickLeaves;
+    }
+
+    public List<Pensioner> getPensioners() {
+        return pensioners;
+    }
+
+    public void setPensioners(List<Pensioner> pensioners) {
+        this.pensioners = pensioners;
+    }
+
+    public List<DismissedEmployee> getDismissedEmployees() {
+        return dismissedEmployees;
+    }
+
+    public void setDismissedEmployees(List<DismissedEmployee> dismissedEmployees) {
+        this.dismissedEmployees = dismissedEmployees;
+    }
+
+    public List<Award> getAwards() {
+        return awards;
+    }
+
+    public void setAwards(List<Award> awards) {
+        this.awards = awards;
+    }
+
+    public List<Punishment> getPunishments() {
+        return punishments;
+    }
+
+    public void setPunishments(List<Punishment> punishments) {
+        this.punishments = punishments;
     }
 
     public Integer getAwardCountFromOffice() {
@@ -264,28 +312,13 @@ public class Employee {
         this.nextAttestationDate = nextAttestationDate;
     }
 
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
-
-    public LocalDateTime getCreatedAt() {
+    public LocalDate getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(LocalDate createdAt) {
         this.createdAt = createdAt;
     }
 
-    public LocalDateTime getUpdateAt() {
-        return updateAt;
-    }
-
-    public void setUpdateAt(LocalDateTime updateAt) {
-        this.updateAt = updateAt;
-    }
 
 }
