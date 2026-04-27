@@ -34,7 +34,8 @@ public class EmployeeMapper {
                 employee.getRankAssignedDate(),
                 employee.getAwardCountFromOffice(),
                 employee.getAppreciationCountFromTashkent(),
-                employee.getNextAttestationDate()
+                employee.getNextAttestationDate(),
+                employee.getNextAttestationStatus()
         );
     }
 

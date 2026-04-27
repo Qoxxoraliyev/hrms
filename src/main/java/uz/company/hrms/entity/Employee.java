@@ -2,6 +2,7 @@ package uz.company.hrms.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import uz.company.hrms.enums.NextAttestation;
 import uz.company.hrms.enums.Rank;
 
 import java.time.LocalDate;
@@ -100,9 +101,13 @@ public class Employee {
     /**
      * Keyingi attestatiyaga borish sanasi
      */
-    @NotNull(message = "Next attestation date is required")
-    @Column(name = "next_attestation_date",nullable = false)
+    @Column(name = "next_attestation_date")
     private LocalDate nextAttestationDate;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "next_attestation_status",nullable = false)
+    private NextAttestation nextAttestationStatus;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id",unique = true,
@@ -140,7 +145,8 @@ public class Employee {
         this.createdAt=LocalDate.now();
     }
 
-    public Employee(Long id, String fullName, Rank rank, Department department, Position position, LocalDate birthDate, String address, LocalDate employmentDate, LocalDate rankAssignedDate, Integer awardCountFromOffice, Integer appreciationCountFromTashkent, LocalDate nextAttestationDate, LocalDate createdAt) {
+
+    public Employee(Long id, String fullName, Rank rank, Department department, Position position, LocalDate birthDate, String address, LocalDate employmentDate, LocalDate rankAssignedDate, Integer awardCountFromOffice, Integer appreciationCountFromTashkent, LocalDate nextAttestationDate, NextAttestation nextAttestationStatus, User user, List<Document> documents, List<VacationSchedule> vacationSchedules, List<SickLeave> sickLeaves, List<Pensioner> pensioners, List<DismissedEmployee> dismissedEmployees, List<Award> awards, List<Punishment> punishments, LocalDate createdAt) {
         this.id = id;
         this.fullName = fullName;
         this.rank = rank;
@@ -153,6 +159,15 @@ public class Employee {
         this.awardCountFromOffice = awardCountFromOffice;
         this.appreciationCountFromTashkent = appreciationCountFromTashkent;
         this.nextAttestationDate = nextAttestationDate;
+        this.nextAttestationStatus = nextAttestationStatus;
+        this.user = user;
+        this.documents = documents;
+        this.vacationSchedules = vacationSchedules;
+        this.sickLeaves = sickLeaves;
+        this.pensioners = pensioners;
+        this.dismissedEmployees = dismissedEmployees;
+        this.awards = awards;
+        this.punishments = punishments;
         this.createdAt = createdAt;
     }
 
@@ -318,6 +333,14 @@ public class Employee {
 
     public void setCreatedAt(LocalDate createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public NextAttestation getNextAttestationStatus() {
+        return nextAttestationStatus;
+    }
+
+    public void setNextAttestationStatus(NextAttestation nextAttestationStatus) {
+        this.nextAttestationStatus = nextAttestationStatus;
     }
 
 
