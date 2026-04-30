@@ -12,6 +12,7 @@ import uz.company.hrms.repository.EmployeeRepository;
 import uz.company.hrms.service.EmployeeService;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 @Transactional
@@ -55,6 +56,52 @@ public class EmployeeServiceImpl implements EmployeeService {
         return EmployeeMapper.toDTO(saved);
     }
 
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<EmployeeResponseDTO> filterByAge(Integer minAge,Integer maxAge){
+        LocalDate today=LocalDate.now();
+        List<Employee> employees;
+
+        if (minAge!=null && maxAge==null){
+            LocalDate limitDate=today.minusYears(minAge);
+
+            employees=employeeRepository.findByBirthDateAfter(limitDate);
+
+        } else if (minAge!=null && maxAge!=null) {
+            LocalDate olderThanDate=today.minusYears(minAge);
+            LocalDate youngerThanDate=today.minusYears(maxAge);
+
+            employees=employeeRepository.findByBirthDateBetween(
+                    youngerThanDate,
+                    olderThanDate
+            );
+        }else {
+            employees=employeeRepository.findAll();
+        }
+
+        return employees.stream()
+                .map(EmployeeMapper::toDTO)
+                .toList();
+    }
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<EmployeeResponseDTO> getAll(){
+        return employeeRepository.findAll()
+                .stream()
+                .map(EmployeeMapper::toDTO)
+                .toList();
+    }
+
+    @Override
+    @Transactional
+    public void delete(Long id){
+        Employee employee=employeeRepository.findById(id)
+                .orElseThrow(()->new RuntimeException("Employee not found with id: "+id));
+        employeeRepository.delete(employee);
+    }
 
     private LocalDate calculateNextAttestationDate(Rank rank, LocalDate rankAssignedDate) {
 

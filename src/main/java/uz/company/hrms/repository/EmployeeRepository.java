@@ -2,10 +2,17 @@ package uz.company.hrms.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import uz.company.hrms.dto.EmployeeResponseDTO;
 import uz.company.hrms.entity.Employee;
+
+import java.time.LocalDate;
+import java.util.List;
 
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee,Long> {
 
+    List<Employee> findByBirthDateAfter(LocalDate birthDate);
+
+    List<Employee> findByBirthDateBetween(LocalDate startDate, LocalDate endDate);
 
 }
