@@ -1,5 +1,6 @@
 package uz.company.hrms.service.Impl;
 
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.company.hrms.dto.EmployeeCreateDTO;
@@ -84,6 +85,65 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .map(EmployeeMapper::toDTO)
                 .toList();
     }
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<EmployeeResponseDTO> filter(
+            Rank rank,
+            Long departmentId,
+            Long positionId,
+            Integer minExperience,
+            Integer maxExperience
+    ){
+        LocalDate today=LocalDate.now();
+        Specification<Employee> spec = (root, query, cb) -> cb.conjunction();
+        if (rank!=null){
+            spec=spec.and((root, query, cb) ->
+                     cb.equal(root.get("rank"),rank)
+                    );
+        }
+
+        if (rank!=null){
+            spec=spec.and(((root, query, cb) ->
+                    cb.equal(root.get("rank"),rank)
+                    ));
+        }
+
+        if (departmentId!=null){
+            spec=spec.and(((root, query, cb) ->
+                    cb.equal(root.get("department").get("id"),departmentId)
+                    ));
+        }
+        if (positionId!=null){
+            spec=spec.and((root, query, cb) ->
+                    cb.equal(root.get("position").get("id"),positionId)
+                    );
+        }
+
+        if (minExperience!=null && maxExperience==null){
+            LocalDate date=today.minusYears(minExperience);
+
+            spec=spec.and(((root, query, cb) ->
+                    cb.lessThanOrEqualTo(root.get("employmentDate"),date)
+                    ));
+        }
+
+        if (minExperience!=null && maxExperience!=null){
+            LocalDate maxDate=today.minusYears(minExperience);
+            LocalDate minDate=today.minusYears(maxExperience);
+
+            spec=spec.and((root, query, cb) ->
+                    cb.between(root.get("employmentDate"),minDate,maxDate)
+                    );
+        }
+
+        return employeeRepository.findAll(spec)
+                .stream()
+                .map(EmployeeMapper::toDTO)
+                .toList();
+    }
+
 
 
     @Override
