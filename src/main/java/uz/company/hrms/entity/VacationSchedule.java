@@ -13,10 +13,6 @@ public class VacationSchedule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "Original schedule id is required")
-    @Column(name = "original_schedule_id",nullable = false)
-    private Long originalScheduledId;
-
     @NotNull(message = "Employee is required")
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "employee_id",nullable = false,
@@ -34,27 +30,15 @@ public class VacationSchedule {
     @Column(name = "vacation_month",nullable = false)
     private VacationMonth vacationMonth;
 
-    @NotNull(message = "Archived time is required")
-    @Column(name = "archived_at",nullable = false)
-    private LocalDate archivedAt;
-
     public VacationSchedule(){}
 
-    public VacationSchedule(Long id, Long originalScheduledId, Employee employee, Department department, VacationMonth vacationMonth, LocalDate archivedAt) {
+    public VacationSchedule(Long id, Employee employee, Department department, VacationMonth vacationMonth) {
         this.id = id;
-        this.originalScheduledId = originalScheduledId;
         this.employee = employee;
         this.department = department;
         this.vacationMonth = vacationMonth;
-        this.archivedAt = archivedAt;
     }
 
-    @PrePersist
-    public void prePersist(){
-        if (this.archivedAt==null){
-            this.archivedAt=LocalDate.now();
-        }
-    }
 
     public Long getId() {
         return id;
@@ -82,22 +66,6 @@ public class VacationSchedule {
 
     public void setVacationMonth(VacationMonth vacationMonth) {
         this.vacationMonth = vacationMonth;
-    }
-
-    public Long getOriginalScheduledId() {
-        return originalScheduledId;
-    }
-
-    public void setOriginalScheduledId(Long originalScheduledId) {
-        this.originalScheduledId = originalScheduledId;
-    }
-
-    public LocalDate getArchivedAt() {
-        return archivedAt;
-    }
-
-    public void setArchivedAt(LocalDate archivedAt) {
-        this.archivedAt = archivedAt;
     }
 
 

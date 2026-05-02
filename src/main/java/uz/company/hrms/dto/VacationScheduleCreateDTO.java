@@ -8,9 +8,7 @@ import java.time.LocalDate;
 
 public record VacationScheduleCreateDTO(
 
-        Long originalScheduledId,
         Employee employee,
         Department department,
-        VacationMonth vacationMonth,
-        LocalDate archivedAt
+        VacationMonth vacationMonth
 ) {}
