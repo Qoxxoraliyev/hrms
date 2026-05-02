@@ -104,17 +104,13 @@ public class EmployeeServiceImpl implements EmployeeService {
                     );
         }
 
-        if (rank!=null){
-            spec=spec.and(((root, query, cb) ->
-                    cb.equal(root.get("rank"),rank)
-                    ));
-        }
 
         if (departmentId!=null){
             spec=spec.and(((root, query, cb) ->
                     cb.equal(root.get("department").get("id"),departmentId)
                     ));
         }
+
         if (positionId!=null){
             spec=spec.and((root, query, cb) ->
                     cb.equal(root.get("position").get("id"),positionId)

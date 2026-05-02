@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import uz.company.hrms.enums.VacationMonth;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 public class VacationSchedule {
@@ -36,21 +36,23 @@ public class VacationSchedule {
 
     @NotNull(message = "Archived time is required")
     @Column(name = "archived_at",nullable = false)
-    private LocalDateTime archivedAt;
+    private LocalDate archivedAt;
 
     public VacationSchedule(){}
 
-    public VacationSchedule(Long id, Employee employee, Department department, VacationMonth vacationMonth) {
+    public VacationSchedule(Long id, Long originalScheduledId, Employee employee, Department department, VacationMonth vacationMonth, LocalDate archivedAt) {
         this.id = id;
+        this.originalScheduledId = originalScheduledId;
         this.employee = employee;
         this.department = department;
         this.vacationMonth = vacationMonth;
+        this.archivedAt = archivedAt;
     }
 
     @PrePersist
     public void prePersist(){
         if (this.archivedAt==null){
-            this.archivedAt=LocalDateTime.now();
+            this.archivedAt=LocalDate.now();
         }
     }
 
@@ -89,5 +91,14 @@ public class VacationSchedule {
     public void setOriginalScheduledId(Long originalScheduledId) {
         this.originalScheduledId = originalScheduledId;
     }
+
+    public LocalDate getArchivedAt() {
+        return archivedAt;
+    }
+
+    public void setArchivedAt(LocalDate archivedAt) {
+        this.archivedAt = archivedAt;
+    }
+
 
 }
