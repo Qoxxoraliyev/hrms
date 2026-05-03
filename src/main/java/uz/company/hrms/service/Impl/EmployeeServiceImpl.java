@@ -5,11 +5,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.company.hrms.dto.EmployeeCreateDTO;
 import uz.company.hrms.dto.EmployeeResponseDTO;
+import uz.company.hrms.entity.Department;
 import uz.company.hrms.entity.Employee;
+import uz.company.hrms.entity.Position;
 import uz.company.hrms.enums.NextAttestation;
 import uz.company.hrms.enums.Rank;
 import uz.company.hrms.mapper.EmployeeMapper;
+import uz.company.hrms.repository.DepartmentRepository;
 import uz.company.hrms.repository.EmployeeRepository;
+import uz.company.hrms.repository.PositionRepository;
 import uz.company.hrms.service.EmployeeService;
 
 import java.time.LocalDate;
@@ -20,21 +24,31 @@ import java.util.List;
 public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
+    private final DepartmentRepository departmentRepository;
+    private final PositionRepository positionRepository;
 
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository, DepartmentRepository departmentRepository, PositionRepository positionRepository) {
         this.employeeRepository = employeeRepository;
+        this.departmentRepository = departmentRepository;
+        this.positionRepository = positionRepository;
     }
 
     @Override
     @Transactional
     public EmployeeResponseDTO employeeCreateDTO(EmployeeCreateDTO dto){
 
+        Department department=departmentRepository.findByName(dto.departmentName())
+                .orElseThrow(()->new RuntimeException("Department not found"));
+
+        Position position=positionRepository.findByName(dto.positionName())
+                .orElseThrow(()->new RuntimeException("Position not found"));
+
         Employee employee=new Employee();
 
         employee.setFullName(dto.fullName());
         employee.setRank(dto.rank());
-        employee.setDepartment(dto.department());
-        employee.setPosition(dto.position());
+        employee.setDepartment(department);
+        employee.setPosition(position);
         employee.setBirthDate(dto.birthDate());
         employee.setAddress(dto.address());
         employee.setEmploymentDate(dto.employmentDate());

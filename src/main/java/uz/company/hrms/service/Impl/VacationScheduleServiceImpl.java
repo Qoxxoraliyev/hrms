@@ -1,15 +1,22 @@
 package uz.company.hrms.service.Impl;
 
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.company.hrms.dto.VacationScheduleCreateDTO;
 import uz.company.hrms.dto.VacationScheduleResponseDTO;
+import uz.company.hrms.entity.Department;
+import uz.company.hrms.entity.Employee;
 import uz.company.hrms.entity.VacationSchedule;
+import uz.company.hrms.entity.VacationScheduleArchive;
 import uz.company.hrms.mapper.VacationScheduleMapper;
+import uz.company.hrms.repository.DepartmentRepository;
+import uz.company.hrms.repository.EmployeeRepository;
 import uz.company.hrms.repository.VacationScheduleArchiveRepository;
 import uz.company.hrms.repository.VacationScheduleRepository;
 import uz.company.hrms.service.VacationScheduleService;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -18,30 +25,82 @@ public class VacationScheduleServiceImpl implements VacationScheduleService {
 
     private final VacationScheduleRepository vacationScheduleRepository;
 
-    private final VacationScheduleArchiveRepository vacationScheduleArchiveRepository;
+    private final VacationScheduleArchiveRepository archiveRepository;
 
-    public VacationScheduleServiceImpl(VacationScheduleRepository vacationScheduleRepository, VacationScheduleArchiveRepository vacationScheduleArchiveRepository) {
+    private final DepartmentRepository departmentRepository;
+
+    private final EmployeeRepository employeeRepository;
+
+    public VacationScheduleServiceImpl(VacationScheduleRepository vacationScheduleRepository, VacationScheduleArchiveRepository archiveRepository, DepartmentRepository departmentRepository, EmployeeRepository employeeRepository) {
         this.vacationScheduleRepository = vacationScheduleRepository;
-        this.vacationScheduleArchiveRepository = vacationScheduleArchiveRepository;
+        this.archiveRepository = archiveRepository;
+        this.departmentRepository = departmentRepository;
+        this.employeeRepository = employeeRepository;
     }
 
     @Override
     @Transactional
     public VacationScheduleResponseDTO createVacationSchedule(VacationScheduleCreateDTO dto){
 
+        Department department=departmentRepository.findByName(dto.departmentName())
+                .orElseThrow(()->new RuntimeException("Department not found"));
+
+        Employee employee=employeeRepository.findByName(dto.employeeName())
+                .orElseThrow(()->new RuntimeException("Employee not found"));
+
         VacationSchedule vacationSchedule=new VacationSchedule();
         vacationSchedule.setVacationMonth(dto.vacationMonth());
-        vacationSchedule.setDepartment(dto.department());
-        vacationSchedule.setEmployee(dto.employee());
+        vacationSchedule.setDepartment(department);
+        vacationSchedule.setEmployee(employee);
         VacationSchedule saved=vacationScheduleRepository.save(vacationSchedule);
         return VacationScheduleMapper.toDto(saved);
     }
 
 
 
+    @Scheduled(cron = "0 59 23 31 12 *")
     public void moveAllToArchive(){
         List<VacationSchedule> schedules=vacationScheduleRepository.findAll();
 
+        for (VacationSchedule schedule:schedules){
+            VacationScheduleArchive archive=new VacationScheduleArchive();
+            archive.setOriginalScheduleId(schedule.getId());
+            archive.setEmployee(schedule.getEmployee());
+            archive.setDepartment(schedule.getDepartment());
+            archive.setVacationMonth(schedule.getVacationMonth());
+            archive.setArchivedAt(LocalDate.now());
+            archiveRepository.save(archive);
+        }
+        vacationScheduleRepository.deleteAll();
+
+    }
+
+
+    @Override
+    @Transactional
+    public List<VacationScheduleResponseDTO> getAll(){
+        return vacationScheduleRepository.findAll()
+                .stream()
+                .map(VacationScheduleMapper::toDto)
+                .toList();
+    }
+
+    @Override
+    @Transactional
+    public List<VacationScheduleResponseDTO> filterByDepartmentName(String name){
+        return vacationScheduleRepository.findByDepartment_Name(name)
+                .stream()
+                .map(VacationScheduleMapper::toDto)
+                .toList();
+    }
+
+
+    @Override
+    @Transactional
+    public void delete(Long id){
+        VacationSchedule vacationSchedule=vacationScheduleRepository.findById(id)
+                .orElseThrow(()->new RuntimeException("Vacation not found"));
+        vacationScheduleRepository.delete(vacationSchedule);
     }
 
 

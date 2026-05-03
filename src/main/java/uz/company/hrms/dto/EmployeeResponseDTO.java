@@ -1,7 +1,5 @@
 package uz.company.hrms.dto;
 
-import uz.company.hrms.entity.Department;
-import uz.company.hrms.entity.Position;
 import uz.company.hrms.enums.NextAttestation;
 import uz.company.hrms.enums.Rank;
 
@@ -11,8 +9,8 @@ public record EmployeeResponseDTO(
         Long id,
         String fullName,
         Rank rank,
-        Department department,
-        Position position,
+        String departmentName,
+        String positionName,
         LocalDate birthDate,
         String address,
         LocalDate employmentDate,

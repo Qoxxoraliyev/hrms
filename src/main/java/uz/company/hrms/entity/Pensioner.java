@@ -29,7 +29,7 @@ public class Pensioner {
     @NotNull(message = "Birth date is required")
     @Past(message = "Birth date must  be in the past")
     @Column(name = "birth_date",nullable = false)
-    private LocalDateTime birthDate;
+    private LocalDate birthDate;
 
     @NotNull(message = "Retirement is required")
     @Column(name = "retirement_date",nullable = false)
@@ -63,7 +63,7 @@ public class Pensioner {
 
     public Pensioner(){}
 
-    public Pensioner(Long id, String fullName, LocalDateTime birthDate, LocalDate retirementDate, Department department, String phoneNumber, RetirementReason retirementReason) {
+    public Pensioner(Long id, String fullName, LocalDate birthDate, LocalDate retirementDate, Department department, String phoneNumber, RetirementReason retirementReason) {
         this.id = id;
         this.fullName = fullName;
         this.birthDate = birthDate;
@@ -85,11 +85,11 @@ public class Pensioner {
         this.fullName = fullName;
     }
 
-    public LocalDateTime getBirthDate() {
+    public LocalDate getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(LocalDateTime birthDate) {
+    public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
 

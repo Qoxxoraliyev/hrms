@@ -2,8 +2,6 @@ package uz.company.hrms.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import uz.company.hrms.entity.Department;
-import uz.company.hrms.entity.Position;
 import uz.company.hrms.enums.Rank;
 
 import java.time.LocalDate;
@@ -17,10 +15,10 @@ public record EmployeeCreateDTO(
         Rank rank,
 
         @NotNull
-        Department department,
+        String departmentName,
 
         @NotNull
-        Position position,
+        String positionName,
 
         @NotNull
         LocalDate birthDate,

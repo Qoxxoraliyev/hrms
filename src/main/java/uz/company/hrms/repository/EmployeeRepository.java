@@ -7,6 +7,7 @@ import uz.company.hrms.entity.Employee;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee,Long>, JpaSpecificationExecutor<Employee> {
@@ -15,6 +16,7 @@ public interface EmployeeRepository extends JpaRepository<Employee,Long>, JpaSpe
 
     List<Employee> findByBirthDateBetween(LocalDate startDate, LocalDate endDate);
 
+    Optional<Employee> findByName(String name);
 
 
 }

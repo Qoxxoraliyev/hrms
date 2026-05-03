@@ -10,8 +10,6 @@ public class EmployeeMapper {
         Employee employee=new Employee();
         employee.setFullName(dto.fullName());
         employee.setRank(dto.rank());
-        employee.setDepartment(dto.department());
-        employee.setPosition(dto.position());
         employee.setBirthDate(dto.birthDate());
         employee.setAddress(dto.address());
         employee.setEmploymentDate(dto.employmentDate());
@@ -26,8 +24,8 @@ public class EmployeeMapper {
                 employee.getId(),
                 employee.getFullName(),
                 employee.getRank(),
-                employee.getDepartment(),
-                employee.getPosition(),
+                employee.getDepartment().getName(),
+                employee.getPosition().getName(),
                 employee.getBirthDate(),
                 employee.getAddress(),
                 employee.getEmploymentDate(),
