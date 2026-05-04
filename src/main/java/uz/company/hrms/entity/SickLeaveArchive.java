@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "sick_leave_archives",
@@ -43,11 +42,11 @@ public class SickLeaveArchive {
     private Integer year;
 
     @NotNull
-    private LocalDateTime archivedAt;
+    private LocalDate archivedAt;
 
     public SickLeaveArchive(){}
 
-    public SickLeaveArchive(Long id, Long originalId, Employee employee, LocalDate startDate, LocalDate endDate, Integer days, String diseaseName, Integer year, LocalDateTime archivedAt) {
+    public SickLeaveArchive(Long id, Long originalId, Employee employee, LocalDate startDate, LocalDate endDate, Integer days, String diseaseName, Integer year, LocalDate archivedAt) {
         this.id = id;
         this.originalId = originalId;
         this.employee = employee;
@@ -119,11 +118,11 @@ public class SickLeaveArchive {
         this.year = year;
     }
 
-    public LocalDateTime getArchivedAt() {
+    public LocalDate getArchivedAt() {
         return archivedAt;
     }
 
-    public void setArchivedAt(LocalDateTime archivedAt) {
+    public void setArchivedAt(LocalDate archivedAt) {
         this.archivedAt = archivedAt;
     }
 

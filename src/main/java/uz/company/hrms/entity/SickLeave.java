@@ -1,7 +1,5 @@
 package uz.company.hrms.entity;
-
 import jakarta.persistence.*;
-
 import java.time.LocalDate;
 
 @Entity
@@ -35,12 +33,9 @@ public class SickLeave {
 
     private Integer year;
 
-    @Column(name = "archived",nullable = false)
-    private boolean archived=false;
-
     public SickLeave(){}
 
-    public SickLeave(Long id, Employee employee, LocalDate startDate, LocalDate endDate, Integer days, String diseaseName, Integer year, boolean archived) {
+    public SickLeave(Long id, Employee employee, LocalDate startDate, LocalDate endDate, Integer days, String diseaseName, Integer year) {
         this.id = id;
         this.employee = employee;
         this.startDate = startDate;
@@ -48,7 +43,6 @@ public class SickLeave {
         this.days = days;
         this.diseaseName = diseaseName;
         this.year = year;
-        this.archived = archived;
     }
 
     public Long getId() {
@@ -103,11 +97,4 @@ public class SickLeave {
         this.year = year;
     }
 
-    public boolean isArchived() {
-        return archived;
-    }
-
-    public void setArchived(boolean archived) {
-        this.archived = archived;
-    }
 }

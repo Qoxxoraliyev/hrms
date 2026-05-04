@@ -2,6 +2,7 @@ package uz.company.hrms.service;
 
 
 import uz.company.hrms.dto.EmployeeCreateDTO;
+import uz.company.hrms.dto.EmployeeDeleteDTO;
 import uz.company.hrms.dto.EmployeeResponseDTO;
 import uz.company.hrms.enums.Rank;
 
@@ -13,7 +14,7 @@ public interface EmployeeService {
 
     List<EmployeeResponseDTO> getAll();
 
-    void delete(Long id);
+    void deleteEmployee(EmployeeDeleteDTO dto);
 
     List<EmployeeResponseDTO> filterByAge(Integer minAge,Integer maxAge);
 

@@ -4,19 +4,23 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.company.hrms.dto.EmployeeCreateDTO;
+import uz.company.hrms.dto.EmployeeDeleteDTO;
 import uz.company.hrms.dto.EmployeeResponseDTO;
 import uz.company.hrms.entity.Department;
 import uz.company.hrms.entity.Employee;
+import uz.company.hrms.entity.EmployeeArchive;
 import uz.company.hrms.entity.Position;
 import uz.company.hrms.enums.NextAttestation;
 import uz.company.hrms.enums.Rank;
 import uz.company.hrms.mapper.EmployeeMapper;
 import uz.company.hrms.repository.DepartmentRepository;
+import uz.company.hrms.repository.EmployeeArchiveRepository;
 import uz.company.hrms.repository.EmployeeRepository;
 import uz.company.hrms.repository.PositionRepository;
 import uz.company.hrms.service.EmployeeService;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 
 @Service
@@ -26,11 +30,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final DepartmentRepository departmentRepository;
     private final PositionRepository positionRepository;
+    private final EmployeeArchiveRepository archiveRepository;
 
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository, DepartmentRepository departmentRepository, PositionRepository positionRepository) {
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository, DepartmentRepository departmentRepository, PositionRepository positionRepository, EmployeeArchiveRepository archiveRepository) {
         this.employeeRepository = employeeRepository;
         this.departmentRepository = departmentRepository;
         this.positionRepository = positionRepository;
+        this.archiveRepository = archiveRepository;
     }
 
     @Override
@@ -167,11 +173,27 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     @Transactional
-    public void delete(Long id){
-        Employee employee=employeeRepository.findById(id)
-                .orElseThrow(()->new RuntimeException("Employee not found with id: "+id));
-        employeeRepository.delete(employee);
+    public void deleteEmployee(EmployeeDeleteDTO dto){
+        Employee employee=employeeRepository.findByName(dto.employeeFullName())
+                .orElseThrow(()->new RuntimeException("Employee not found"));
+
+
+        if (Boolean.TRUE.equals(dto.archive())){
+            EmployeeArchive archive=new EmployeeArchive();
+            archive.setOldEmployeeId(employee.getId());
+            archive.setFullName(employee.getFullName());
+            archive.setBirthDate(employee.getBirthDate());
+            archive.setEmploymentDate(employee.getEmploymentDate());
+            archive.setLeavingDate(employee.getEmploymentDate());
+            archive.setDepartmentName(employee.getDepartment().getName());
+            archive.setPositionName(employee.getPosition().getName());
+            archive.setRetirementReason(dto.retirementReason());
+            String experience=calculateExperience(employee.getEmploymentDate());
+            archive.setExperience(experience);
+            employeeRepository.delete(employee);
+        }
     }
+
 
     private LocalDate calculateNextAttestationDate(Rank rank, LocalDate rankAssignedDate) {
 
@@ -192,5 +214,12 @@ public class EmployeeServiceImpl implements EmployeeService {
             case PODPOLKOVNIK -> rankAssignedDate.plusYears(5);
         };
     }
+
+
+    private String calculateExperience(LocalDate employmentDate){
+        Period period=Period.between(employmentDate,LocalDate.now());
+        return period.getYears()+"yil, "+period.getMonths()+" oy, "+period.getDays()+" kun";
+    }
+
 
 }
