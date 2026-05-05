@@ -31,18 +31,15 @@ public class SickLeave {
 
     private String diseaseName;
 
-    private Integer year;
-
     public SickLeave(){}
 
-    public SickLeave(Long id, Employee employee, LocalDate startDate, LocalDate endDate, Integer days, String diseaseName, Integer year) {
+    public SickLeave(Long id, Employee employee, LocalDate startDate, LocalDate endDate, Integer days, String diseaseName) {
         this.id = id;
         this.employee = employee;
         this.startDate = startDate;
         this.endDate = endDate;
         this.days = days;
         this.diseaseName = diseaseName;
-        this.year = year;
     }
 
     public Long getId() {
@@ -89,12 +86,5 @@ public class SickLeave {
         this.diseaseName = diseaseName;
     }
 
-    public Integer getYear() {
-        return year;
-    }
-
-    public void setYear(Integer year) {
-        this.year = year;
-    }
 
 }

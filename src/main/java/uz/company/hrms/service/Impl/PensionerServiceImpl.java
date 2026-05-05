@@ -59,7 +59,7 @@ public class PensionerServiceImpl implements PensionerService {
                 .stream()
                 .map(PensionerMapper::toDTO)
                 .toList();
-    }c
+    }
 
 
     @Override
