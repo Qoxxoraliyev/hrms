@@ -29,6 +29,9 @@ public class Award {
     private Employee employee;
 
     @NotNull
+    private Integer awardCount=0;
+
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "award_type",nullable = false)
     private AwardType awardType;
@@ -39,9 +42,10 @@ public class Award {
 
     public Award(){}
 
-    public Award(Long id, Employee employee, AwardType awardType, LocalDate awardDate) {
+    public Award(Long id, Employee employee, Integer awardCount, AwardType awardType, LocalDate awardDate) {
         this.id = id;
         this.employee = employee;
+        this.awardCount = awardCount;
         this.awardType = awardType;
         this.awardDate = awardDate;
     }
@@ -73,5 +77,14 @@ public class Award {
     public void setAwardDate(LocalDate awardDate) {
         this.awardDate = awardDate;
     }
+
+    public Integer getAwardCount() {
+        return awardCount;
+    }
+
+    public void setAwardCount(Integer awardCount) {
+        this.awardCount = awardCount;
+    }
+
 
 }
