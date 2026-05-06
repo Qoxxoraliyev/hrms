@@ -30,6 +30,9 @@ public class Punishment {
     foreignKey = @ForeignKey(name = "fk_punishment_employee"))
     private Employee employee;
 
+    @NotNull
+    private Integer punishmentCount=0;
+
     /**
      * jazo turi
      */
@@ -45,36 +48,14 @@ public class Punishment {
     @Column(name = "punishment_date",nullable = false)
     private LocalDate punishmentDate;
 
-    /**
-     * eski jazo yoki yangi jazo ekanini elgilash uchun
-     */
-    @Column(name = "old_punishment",nullable = false)
-    private boolean oldPunishment=false;
-
-    /**
-     * jazo failmi ?
-     * true = hali yechilmagan
-     * false = yechilgan
-     */
-    @Column(name = "active",nullable = false)
-    private boolean active=false;
-
-    /**
-     * jazo yechilgan sana
-     */
-    @Column(name = "resolved_date")
-    private LocalDate resolvedDate;
-
     public Punishment(){}
 
-    public Punishment(Long id, Employee employee, PunishmentType punishmentType, LocalDate punishmentDate, boolean oldPunishment, boolean active, LocalDate resolvedDate) {
+    public Punishment(Long id, Employee employee, Integer punishmentCount, PunishmentType punishmentType, LocalDate punishmentDate) {
         this.id = id;
         this.employee = employee;
+        this.punishmentCount = punishmentCount;
         this.punishmentType = punishmentType;
         this.punishmentDate = punishmentDate;
-        this.oldPunishment = oldPunishment;
-        this.active = active;
-        this.resolvedDate = resolvedDate;
     }
 
     public Long getId() {
@@ -105,28 +86,12 @@ public class Punishment {
         this.punishmentDate = punishmentDate;
     }
 
-    public boolean isOldPunishment() {
-        return oldPunishment;
+    public Integer getPunishmentCount() {
+        return punishmentCount;
     }
 
-    public void setOldPunishment(boolean oldPunishment) {
-        this.oldPunishment = oldPunishment;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    public LocalDate getResolvedDate() {
-        return resolvedDate;
-    }
-
-    public void setResolvedDate(LocalDate resolvedDate) {
-        this.resolvedDate = resolvedDate;
+    public void setPunishmentCount(Integer punishmentCount) {
+        this.punishmentCount = punishmentCount;
     }
 
 }
