@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.company.hrms.dto.AwardCreateDTO;
 import uz.company.hrms.dto.AwardResponseDTO;
+import uz.company.hrms.dto.EmployeeNameDTO;
 import uz.company.hrms.entity.Award;
 import uz.company.hrms.entity.Employee;
 import uz.company.hrms.mapper.AwardMapper;
@@ -58,6 +59,15 @@ public class AwardServiceImpl implements AwardService {
         return awardRepository.findByEmployee_Name(employeeFullName)
                 .stream()
                 .map(AwardMapper::toDTO)
+                .toList();
+    }
+
+    @Override
+    @Transactional
+    public List<EmployeeNameDTO> getEmployees(){
+        return employeeRepository.findAll()
+                .stream()
+                .map(employee -> new EmployeeNameDTO(employee.getFullName()))
                 .toList();
     }
 

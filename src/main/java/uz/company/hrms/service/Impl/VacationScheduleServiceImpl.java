@@ -3,12 +3,14 @@ package uz.company.hrms.service.Impl;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uz.company.hrms.dto.VacationEmployeeDTO;
 import uz.company.hrms.dto.VacationScheduleCreateDTO;
 import uz.company.hrms.dto.VacationScheduleResponseDTO;
 import uz.company.hrms.entity.Department;
 import uz.company.hrms.entity.Employee;
 import uz.company.hrms.entity.VacationSchedule;
 import uz.company.hrms.entity.VacationScheduleArchive;
+import uz.company.hrms.enums.VacationMonth;
 import uz.company.hrms.mapper.VacationScheduleMapper;
 import uz.company.hrms.repository.DepartmentRepository;
 import uz.company.hrms.repository.EmployeeRepository;
@@ -93,6 +95,21 @@ public class VacationScheduleServiceImpl implements VacationScheduleService {
                 .map(VacationScheduleMapper::toDto)
                 .toList();
     }
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<VacationEmployeeDTO> getCurrentMonthVacationEmployees(){
+        VacationMonth currentMonth=VacationMonth.from(LocalDate.now().getMonth());
+        return vacationScheduleRepository.findByVacationMonth(currentMonth)
+                .stream()
+                .map(v->new VacationEmployeeDTO(
+                        v.getEmployee().getFullName()
+                ))
+                .toList();
+    }
+
+
 
 
     @Override

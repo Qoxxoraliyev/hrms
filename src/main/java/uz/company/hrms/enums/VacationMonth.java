@@ -9,8 +9,25 @@ public enum VacationMonth {
     IYUN,
     IYUL,
     AVGUST,
-    SENTYABR,
-    OKTIABR,
+    SENTABR,
+    OKTABR,
     NOYABR,
-    DEKABR
+    DEKABR;
+
+    public static VacationMonth from(java.time.Month month){
+        return switch (month){
+            case JANUARY -> YANVAR;
+            case FEBRUARY -> FEVRAL;
+            case MARCH -> MART;
+            case APRIL -> APREL;
+            case MAY -> MAY;
+            case JUNE -> IYUN;
+            case JULY -> IYUL;
+            case AUGUST -> AVGUST;
+            case SEPTEMBER -> SENTABR;
+            case OCTOBER -> OKTABR;
+            case NOVEMBER -> NOYABR;
+            case DECEMBER -> DEKABR;
+        };
+    }
 }

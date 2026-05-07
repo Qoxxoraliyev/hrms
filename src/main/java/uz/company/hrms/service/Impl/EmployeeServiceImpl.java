@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import uz.company.hrms.dto.EmployeeCreateDTO;
 import uz.company.hrms.dto.EmployeeDeleteDTO;
 import uz.company.hrms.dto.EmployeeResponseDTO;
+import uz.company.hrms.dto.YoungEmployeeDTO;
 import uz.company.hrms.entity.Department;
 import uz.company.hrms.entity.Employee;
 import uz.company.hrms.entity.EmployeeArchive;
@@ -193,6 +194,22 @@ public class EmployeeServiceImpl implements EmployeeService {
             employeeRepository.delete(employee);
         }
     }
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<YoungEmployeeDTO> getYoungEmployee(){
+        LocalDate twoYearsAgo=LocalDate.now().minusYears(2);
+        return employeeRepository.findByEmploymentDateAfter(twoYearsAgo)
+                .stream()
+                .map(employee -> new YoungEmployeeDTO(
+                        employee.getId(),
+                        employee.getFullName(),
+                        employee.getEmploymentDate()
+                ))
+                .toList();
+    }
+
 
 
     private LocalDate calculateNextAttestationDate(Rank rank, LocalDate rankAssignedDate) {

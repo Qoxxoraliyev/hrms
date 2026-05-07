@@ -2,6 +2,7 @@ package uz.company.hrms.service.Impl;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uz.company.hrms.dto.EmployeeNameDTO;
 import uz.company.hrms.dto.PunishmentCreateDTO;
 import uz.company.hrms.dto.PunishmentResponseDTO;
 import uz.company.hrms.entity.Employee;
@@ -59,6 +60,17 @@ public class PunishmentServiceImpl implements PunishmentService {
                 .orElseThrow(()->new RuntimeException("Punishment not found"));
         punishmentRepository.delete(punishment);
     }
+
+    @Override
+    @Transactional
+    public List<EmployeeNameDTO> getEmployees(){
+
+        return employeeRepository.findAll()
+                .stream()
+                .map(employee -> new EmployeeNameDTO(employee.getFullName()))
+                .toList();
+    }
+
 
     @Override
     @Transactional

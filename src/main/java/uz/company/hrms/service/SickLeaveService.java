@@ -1,5 +1,6 @@
 package uz.company.hrms.service;
 
+import uz.company.hrms.dto.EmployeeNameDTO;
 import uz.company.hrms.dto.SickLeaveCreateDTO;
 import uz.company.hrms.dto.SickLeaveResponseDTO;
 
@@ -12,6 +13,8 @@ public interface SickLeaveService {
     List<SickLeaveResponseDTO> getAll();
 
     List<SickLeaveResponseDTO> filterByEmployeeFullName(String fullName);
+
+    List<EmployeeNameDTO> getEmployees();
 
     void delete(Long id);
 

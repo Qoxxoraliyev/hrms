@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import uz.company.hrms.enums.VacationMonth;
 
-import java.time.LocalDate;
 
 @Entity
 public class VacationSchedule {
