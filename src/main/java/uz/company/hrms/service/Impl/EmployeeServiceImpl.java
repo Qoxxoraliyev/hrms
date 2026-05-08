@@ -10,19 +10,17 @@ import uz.company.hrms.dto.YoungEmployeeDTO;
 import uz.company.hrms.entity.Department;
 import uz.company.hrms.entity.Employee;
 import uz.company.hrms.entity.EmployeeArchive;
-import uz.company.hrms.entity.Position;
+import uz.company.hrms.entity.StaffPosition;
 import uz.company.hrms.enums.NextAttestation;
 import uz.company.hrms.enums.Rank;
 import uz.company.hrms.mapper.EmployeeMapper;
-import uz.company.hrms.repository.DepartmentRepository;
-import uz.company.hrms.repository.EmployeeArchiveRepository;
-import uz.company.hrms.repository.EmployeeRepository;
-import uz.company.hrms.repository.PositionRepository;
+import uz.company.hrms.repository.*;
 import uz.company.hrms.service.EmployeeService;
 
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
+import java.util.Stack;
 
 @Service
 @Transactional
@@ -30,14 +28,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
     private final DepartmentRepository departmentRepository;
-    private final PositionRepository positionRepository;
     private final EmployeeArchiveRepository archiveRepository;
+    private final StaffPositionRepository staffPositionRepository;
 
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository, DepartmentRepository departmentRepository, PositionRepository positionRepository, EmployeeArchiveRepository archiveRepository) {
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository, DepartmentRepository departmentRepository, EmployeeArchiveRepository archiveRepository, StaffPositionRepository staffPositionRepository) {
         this.employeeRepository = employeeRepository;
         this.departmentRepository = departmentRepository;
-        this.positionRepository = positionRepository;
         this.archiveRepository = archiveRepository;
+        this.staffPositionRepository = staffPositionRepository;
     }
 
     @Override
@@ -47,15 +45,26 @@ public class EmployeeServiceImpl implements EmployeeService {
         Department department=departmentRepository.findByName(dto.departmentName())
                 .orElseThrow(()->new RuntimeException("Department not found"));
 
-        Position position=positionRepository.findByName(dto.positionName())
-                .orElseThrow(()->new RuntimeException("Position not found"));
+        StaffPosition staffPosition=staffPositionRepository.findByPositionNameAndDepartment_Name(
+                dto.staffPositionName(),
+                dto.departmentName()
+        )
+                .orElseThrow(()->new RuntimeException("Staff position not found"));
+
+        if (!staffPosition.getDepartment().getId().equals(department.getId())){
+            throw new RuntimeException("Staff position bu department ga tegishli emas");
+        }
+
+        if (staffPosition.getOccupiedSlots()>=staffPosition.getTotalSlots()){
+            throw new RuntimeException("Bu shtat to'lgan");
+        }
 
         Employee employee=new Employee();
 
         employee.setFullName(dto.fullName());
         employee.setRank(dto.rank());
         employee.setDepartment(department);
-        employee.setPosition(position);
+        employee.setStaffPosition(staffPosition);
         employee.setBirthDate(dto.birthDate());
         employee.setAddress(dto.address());
         employee.setEmploymentDate(dto.employmentDate());
@@ -73,6 +82,12 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (nextDate==null){
             employee.setNextAttestationStatus(NextAttestation.MUDDATSIZ);
         }
+        else {
+            employee.setNextAttestationStatus(NextAttestation.MUDDATLI);
+        }
+
+        staffPosition.setOccupiedSlots(staffPosition.getOccupiedSlots()+1);
+
         Employee saved=employeeRepository.save(employee);
 
         return EmployeeMapper.toDTO(saved);
@@ -134,7 +149,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         if (positionId!=null){
             spec=spec.and((root, query, cb) ->
-                    cb.equal(root.get("position").get("id"),positionId)
+                    cb.equal(root.get("staffPosition").get("id"),positionId)
                     );
         }
 
@@ -178,6 +193,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee=employeeRepository.findByName(dto.employeeFullName())
                 .orElseThrow(()->new RuntimeException("Employee not found"));
 
+        StaffPosition staffPosition=employee.getStaffPosition();
+
+        if (staffPosition.getOccupiedSlots()>0){
+            staffPosition.setOccupiedSlots(staffPosition.getOccupiedSlots()-1);
+        }
 
         if (Boolean.TRUE.equals(dto.archive())){
             EmployeeArchive archive=new EmployeeArchive();
@@ -187,12 +207,14 @@ public class EmployeeServiceImpl implements EmployeeService {
             archive.setEmploymentDate(employee.getEmploymentDate());
             archive.setLeavingDate(employee.getEmploymentDate());
             archive.setDepartmentName(employee.getDepartment().getName());
-            archive.setPositionName(employee.getPosition().getName());
+            archive.setPositionName(employee.getStaffPosition().getPositionName());
             archive.setRetirementReason(dto.retirementReason());
             String experience=calculateExperience(employee.getEmploymentDate());
             archive.setExperience(experience);
-            employeeRepository.delete(employee);
+            archiveRepository.save(archive);
         }
+
+        employeeRepository.delete(employee);
     }
 
 

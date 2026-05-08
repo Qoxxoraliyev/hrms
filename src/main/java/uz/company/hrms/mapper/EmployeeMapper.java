@@ -25,7 +25,7 @@ public class EmployeeMapper {
                 employee.getFullName(),
                 employee.getRank(),
                 employee.getDepartment().getName(),
-                employee.getPosition().getName(),
+                employee.getStaffPosition().getPositionName(),
                 employee.getBirthDate(),
                 employee.getAddress(),
                 employee.getEmploymentDate(),

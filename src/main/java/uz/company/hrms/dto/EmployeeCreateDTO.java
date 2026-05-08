@@ -18,7 +18,7 @@ public record EmployeeCreateDTO(
         String departmentName,
 
         @NotNull
-        String positionName,
+        String staffPositionName,
 
         @NotNull
         LocalDate birthDate,

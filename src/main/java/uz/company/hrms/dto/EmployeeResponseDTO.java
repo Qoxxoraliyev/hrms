@@ -10,7 +10,7 @@ public record EmployeeResponseDTO(
         String fullName,
         Rank rank,
         String departmentName,
-        String positionName,
+        String staffPositionName,
         LocalDate birthDate,
         String address,
         LocalDate employmentDate,

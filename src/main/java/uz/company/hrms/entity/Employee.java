@@ -40,14 +40,12 @@ public class Employee {
     private Department department;
 
 
-    /**
-     * Lavozim
-     */
-    @NotNull(message = "Position is required")
+    // Lavozim
+    @NotNull(message = "Staff position is required")
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
-    @JoinColumn(name = "position_id",nullable = false,
-    foreignKey = @ForeignKey(name = "fk_employee_position"))
-    private Position position;
+    @JoinColumn(name = "staff_position_id",nullable = false)
+    private StaffPosition staffPosition;
+
 
     /**
      * Tug'ulgan sana
@@ -146,12 +144,12 @@ public class Employee {
     }
 
 
-    public Employee(Long id, String fullName, Rank rank, Department department, Position position, LocalDate birthDate, String address, LocalDate employmentDate, LocalDate rankAssignedDate, Integer awardCountFromOffice, Integer appreciationCountFromTashkent, LocalDate nextAttestationDate, NextAttestation nextAttestationStatus, User user, List<Document> documents, List<VacationSchedule> vacationSchedules, List<SickLeave> sickLeaves, List<Pensioner> pensioners, List<DismissedEmployee> dismissedEmployees, List<Award> awards, List<Punishment> punishments, LocalDate createdAt) {
+    public Employee(Long id, String fullName, Rank rank, Department department, StaffPosition staffPosition, LocalDate birthDate, String address, LocalDate employmentDate, LocalDate rankAssignedDate, Integer awardCountFromOffice, Integer appreciationCountFromTashkent, LocalDate nextAttestationDate, NextAttestation nextAttestationStatus, User user, List<Document> documents, List<VacationSchedule> vacationSchedules, List<SickLeave> sickLeaves, List<Pensioner> pensioners, List<DismissedEmployee> dismissedEmployees, List<Award> awards, List<Punishment> punishments, LocalDate createdAt) {
         this.id = id;
         this.fullName = fullName;
         this.rank = rank;
         this.department = department;
-        this.position = position;
+        this.staffPosition = staffPosition;
         this.birthDate = birthDate;
         this.address = address;
         this.employmentDate = employmentDate;
@@ -197,14 +195,6 @@ public class Employee {
 
     public void setDepartment(Department department) {
         this.department = department;
-    }
-
-    public Position getPosition() {
-        return position;
-    }
-
-    public void setPosition(Position position) {
-        this.position = position;
     }
 
     public LocalDate getBirthDate() {
@@ -343,5 +333,12 @@ public class Employee {
         this.nextAttestationStatus = nextAttestationStatus;
     }
 
+    public StaffPosition getStaffPosition() {
+        return staffPosition;
+    }
+
+    public void setStaffPosition(StaffPosition staffPosition) {
+        this.staffPosition = staffPosition;
+    }
 
 }
