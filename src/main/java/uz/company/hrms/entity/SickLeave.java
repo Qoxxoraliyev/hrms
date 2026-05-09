@@ -8,7 +8,6 @@ import java.time.LocalDate;
         indexes = {
                 @Index(name = "idx_sick_leave_employee",columnList = "employee_id"),
                 @Index(name = "idx_sick_leave_start_date",columnList = "start_date"),
-                @Index(name = "idx_sick_leave_year",columnList = "year")
         }
 )
 public class SickLeave {

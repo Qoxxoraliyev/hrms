@@ -9,6 +9,6 @@ import java.util.List;
 @Repository
 public interface PunishmentRepository extends JpaRepository<Punishment,Long> {
 
-    List<Punishment> findByEmployee_Name(String employeeName);
+    List<Punishment> findByEmployee_FullName(String employeeFullName);
 
 }

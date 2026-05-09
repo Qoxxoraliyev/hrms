@@ -12,7 +12,6 @@ indexes = {
         @Index(name = "idx_punishment_employee",columnList = "employee_id"),
         @Index(name = "idx_punishment_date",columnList = "punishment_date"),
         @Index(name = "idx_punishment_type",columnList = "punishment_type"),
-        @Index(name = "idx_punishment_active",columnList = "active")
 })
 public class Punishment {
 

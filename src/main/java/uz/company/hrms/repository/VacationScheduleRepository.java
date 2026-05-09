@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface VacationScheduleRepository extends JpaRepository<VacationSchedule,Long> {
 
-    List<VacationSchedule> findByDepartment_Name(String name);
+    List<VacationSchedule> findByDepartment_Name(String departmentName);
 
     List<VacationSchedule> findByVacationMonth(VacationMonth vacationMonth);
 

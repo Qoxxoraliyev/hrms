@@ -16,7 +16,7 @@ public interface EmployeeRepository extends JpaRepository<Employee,Long>, JpaSpe
 
     List<Employee> findByBirthDateBetween(LocalDate startDate, LocalDate endDate);
 
-    Optional<Employee> findByName(String name);
+    Optional<Employee> findByFullName(String fullName);
 
     List<Employee> findByEmploymentDateAfter(LocalDate date);
 

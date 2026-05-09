@@ -47,7 +47,7 @@ public class VacationScheduleServiceImpl implements VacationScheduleService {
         Department department=departmentRepository.findByName(dto.departmentName())
                 .orElseThrow(()->new RuntimeException("Department not found"));
 
-        Employee employee=employeeRepository.findByName(dto.employeeName())
+        Employee employee=employeeRepository.findByFullName(dto.employeeName())
                 .orElseThrow(()->new RuntimeException("Employee not found"));
 
         VacationSchedule vacationSchedule=new VacationSchedule();
@@ -104,6 +104,7 @@ public class VacationScheduleServiceImpl implements VacationScheduleService {
         return vacationScheduleRepository.findByVacationMonth(currentMonth)
                 .stream()
                 .map(v->new VacationEmployeeDTO(
+                        v.getEmployee().getId(),
                         v.getEmployee().getFullName()
                 ))
                 .toList();

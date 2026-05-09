@@ -30,7 +30,7 @@ public class AwardServiceImpl implements AwardService {
     @Transactional
     public AwardResponseDTO createAward(AwardCreateDTO dto){
 
-        Employee employee=employeeRepository.findByName(dto.employeeFullName())
+        Employee employee=employeeRepository.findByFullName(dto.employeeFullName())
                 .orElseThrow(()->new RuntimeException("Employee not found"));
 
         Award award=new Award();
@@ -56,7 +56,7 @@ public class AwardServiceImpl implements AwardService {
     @Override
     @Transactional
     public List<AwardResponseDTO> filterByEmployeeName(String employeeFullName){
-        return awardRepository.findByEmployee_Name(employeeFullName)
+        return awardRepository.findByEmployee_FullName(employeeFullName)
                 .stream()
                 .map(AwardMapper::toDTO)
                 .toList();
@@ -67,7 +67,10 @@ public class AwardServiceImpl implements AwardService {
     public List<EmployeeNameDTO> getEmployees(){
         return employeeRepository.findAll()
                 .stream()
-                .map(employee -> new EmployeeNameDTO(employee.getFullName()))
+                .map(employee -> new EmployeeNameDTO(
+                        employee.getId(),
+                        employee.getFullName()
+                ))
                 .toList();
     }
 

@@ -34,7 +34,7 @@ public class SickLeaveServiceImpl implements SickLeaveService {
     @Transactional
     public SickLeaveResponseDTO createSickLeave(SickLeaveCreateDTO dto){
 
-        Employee employee=employeeRepository.findByName(dto.employeeFullName())
+        Employee employee=employeeRepository.findByFullName(dto.employeeFullName())
                 .orElseThrow(()->new RuntimeException("Employee not found"));
 
         SickLeave sickLeave=new SickLeave();
@@ -80,7 +80,9 @@ public class SickLeaveServiceImpl implements SickLeaveService {
     public List<EmployeeNameDTO> getEmployees(){
         return employeeRepository.findAll()
                 .stream()
-                .map(employee -> new EmployeeNameDTO(employee.getFullName()))
+                .map(employee -> new EmployeeNameDTO(
+                        employee.getId(),
+                        employee.getFullName()))
                 .toList();
     }
 

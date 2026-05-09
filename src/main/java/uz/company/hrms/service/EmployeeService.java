@@ -23,8 +23,8 @@ public interface EmployeeService {
 
     List<EmployeeResponseDTO> filter(
             Rank rank,
-            Long departmentId,
-            Long positionId,
+            String departmentName,
+            String staffPositionName,
             Integer minExperience,
             Integer maxExperience
     );

@@ -9,6 +9,6 @@ import java.util.List;
 @Repository
 public interface AwardRepository extends JpaRepository<Award,Long> {
 
-    List<Award> findByEmployee_Name(String employeeName);
+    List<Award> findByEmployee_FullName(String employeeFullName);
 
 }

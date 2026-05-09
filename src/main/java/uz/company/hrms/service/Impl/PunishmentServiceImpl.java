@@ -31,7 +31,7 @@ public class PunishmentServiceImpl implements PunishmentService {
     @Transactional
     public PunishmentResponseDTO createPunishment(PunishmentCreateDTO dto){
 
-        Employee employee=employeeRepository.findByName(dto.employeeFullName())
+        Employee employee=employeeRepository.findByFullName(dto.employeeFullName())
                 .orElseThrow(()->new RuntimeException("Employee not found"));
         Punishment punishment=new Punishment();
         punishment.setPunishmentCount(dto.punishmentCount());
@@ -67,7 +67,9 @@ public class PunishmentServiceImpl implements PunishmentService {
 
         return employeeRepository.findAll()
                 .stream()
-                .map(employee -> new EmployeeNameDTO(employee.getFullName()))
+                .map(employee -> new EmployeeNameDTO(
+                        employee.getId(),
+                        employee.getFullName()))
                 .toList();
     }
 
@@ -75,7 +77,7 @@ public class PunishmentServiceImpl implements PunishmentService {
     @Override
     @Transactional
     public List<PunishmentResponseDTO> filterByEmployeeFullName(String employeeFullName){
-        return punishmentRepository.findByEmployee_Name(employeeFullName)
+        return punishmentRepository.findByEmployee_FullName(employeeFullName)
                 .stream()
                 .map(PunishmentMapper::toDTO)
                 .toList();

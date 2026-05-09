@@ -20,7 +20,6 @@ import uz.company.hrms.service.EmployeeService;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
-import java.util.Stack;
 
 @Service
 @Transactional
@@ -127,8 +126,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Transactional(readOnly = true)
     public List<EmployeeResponseDTO> filter(
             Rank rank,
-            Long departmentId,
-            Long positionId,
+            String departmentName,
+            String staffPositionName,
             Integer minExperience,
             Integer maxExperience
     ){
@@ -141,15 +140,15 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
 
 
-        if (departmentId!=null){
+        if (departmentName!=null && !departmentName.isBlank()){
             spec=spec.and(((root, query, cb) ->
-                    cb.equal(root.get("department").get("id"),departmentId)
+                    cb.equal(root.get("department").get("name"),departmentName)
                     ));
         }
 
-        if (positionId!=null){
+        if (staffPositionName!=null && !staffPositionName.isBlank()){
             spec=spec.and((root, query, cb) ->
-                    cb.equal(root.get("staffPosition").get("id"),positionId)
+                    cb.equal(root.get("staffPosition").get("positionName"),staffPositionName)
                     );
         }
 
@@ -190,7 +189,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     @Transactional
     public void deleteEmployee(EmployeeDeleteDTO dto){
-        Employee employee=employeeRepository.findByName(dto.employeeFullName())
+        Employee employee=employeeRepository.findByFullName(dto.employeeFullName())
                 .orElseThrow(()->new RuntimeException("Employee not found"));
 
         StaffPosition staffPosition=employee.getStaffPosition();
