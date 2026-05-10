@@ -1,4 +1,4 @@
-package uz.company.hrms.security;
+package uz.company.hrms.security.service;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

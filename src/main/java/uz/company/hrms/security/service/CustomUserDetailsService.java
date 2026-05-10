@@ -1,4 +1,4 @@
-package uz.company.hrms.security;
+package uz.company.hrms.security.service;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

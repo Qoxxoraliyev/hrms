@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.company.hrms.dto.UserCreateDTO;
 import uz.company.hrms.dto.UserResponseDTO;
+import uz.company.hrms.dto.auth.UserPasswordUpdateDTO;
 import uz.company.hrms.entity.User;
 import uz.company.hrms.enums.Role;
 import uz.company.hrms.mapper.UserMapper;
@@ -69,12 +70,32 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
+    public void updatePassword(Long id, UserPasswordUpdateDTO dto){
+        User user=getUser(id);
+        if (!passwordEncoder.matches(dto.oldPassword(),user.getPassword())){
+            throw new RuntimeException("Old password is incorrect");
+        }
+
+        user.setPassword(passwordEncoder.encode(dto.newPassword()));
+    }
+
+
+    @Override
+    @Transactional
     public void delete(Long id){
 
         User user=userRepository.findById(id)
                 .orElseThrow(()->new RuntimeException("User not found: "+id));
         userRepository.delete(user);
     }
+
+    private User getUser(Long id){
+        return userRepository.findById(id)
+                .orElseThrow(()->new RuntimeException("User not found"));
+    }
+
+
+
 
 
 

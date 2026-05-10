@@ -1,4 +1,4 @@
-package uz.company.hrms.security;
+package uz.company.hrms.security.service;
 
 import org.springframework.stereotype.Service;
 import uz.company.hrms.repository.BlacklistedTokenRepository;
