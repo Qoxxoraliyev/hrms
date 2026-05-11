@@ -1,9 +1,11 @@
 package uz.company.hrms.service.Impl;
 
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.company.hrms.dto.VacationEmployeeDTO;
+import uz.company.hrms.dto.VacationScheduleArchiveDTO;
 import uz.company.hrms.dto.VacationScheduleCreateDTO;
 import uz.company.hrms.dto.VacationScheduleResponseDTO;
 import uz.company.hrms.entity.Department;
@@ -108,6 +110,21 @@ public class VacationScheduleServiceImpl implements VacationScheduleService {
                         v.getEmployee().getFullName()
                 ))
                 .toList();
+    }
+
+
+    @Override
+    @Transactional
+    public List<VacationScheduleArchiveDTO> getArchiveVacationSchedule(){
+        return archiveRepository.findAll()
+                .stream()
+                .map(archive->new VacationScheduleArchiveDTO(
+                        archive.getId(),
+                        archive.getEmployee().getFullName(),
+                        archive.getDepartment().getName(),
+                        archive.getVacationMonth(),
+                        archive.getArchivedAt()
+                )).toList();
     }
 
 

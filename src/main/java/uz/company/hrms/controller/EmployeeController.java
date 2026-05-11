@@ -1,10 +1,7 @@
 package uz.company.hrms.controller;
 
 import org.springframework.web.bind.annotation.*;
-import uz.company.hrms.dto.EmployeeCreateDTO;
-import uz.company.hrms.dto.EmployeeDeleteDTO;
-import uz.company.hrms.dto.EmployeeResponseDTO;
-import uz.company.hrms.dto.YoungEmployeeDTO;
+import uz.company.hrms.dto.*;
 import uz.company.hrms.enums.Rank;
 import uz.company.hrms.service.EmployeeService;
 import java.util.List;
@@ -64,6 +61,17 @@ public class EmployeeController {
     public List<YoungEmployeeDTO> getYoungEmployee(){
         return employeeService.getYoungEmployee();
     }
+
+    /**
+     * arxivdagi xodimlarni ro'yhatini olish
+     * @return
+     */
+    @GetMapping("/archive")
+    public List<ArchiveEmployeeDTO> getArchiveEmployee(){
+        return employeeService.getArchiveEmployee();
+    }
+
+
 
     @GetMapping("filter")
     public List<EmployeeResponseDTO> filter(

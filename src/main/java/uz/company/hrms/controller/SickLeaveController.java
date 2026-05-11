@@ -1,6 +1,7 @@
 package uz.company.hrms.controller;
 
 import org.springframework.web.bind.annotation.*;
+import uz.company.hrms.dto.SickLeaveArchiveDTO;
 import uz.company.hrms.dto.SickLeaveCreateDTO;
 import uz.company.hrms.dto.SickLeaveResponseDTO;
 import uz.company.hrms.service.SickLeaveService;
@@ -31,6 +32,13 @@ public class SickLeaveController {
     public List<SickLeaveResponseDTO> getByEmployeeFullName(@RequestParam String employeeFullName){
         return sickLeaveService.filterByEmployeeFullName(employeeFullName);
     }
+
+
+    @GetMapping("/archive")
+    public List<SickLeaveArchiveDTO> getArchiveLeave(){
+        return sickLeaveService.getSickLeaveArchive();
+    }
+
 
 
     @DeleteMapping("/{id}")

@@ -2,6 +2,7 @@ package uz.company.hrms.controller;
 
 import org.springframework.web.bind.annotation.*;
 import uz.company.hrms.dto.VacationEmployeeDTO;
+import uz.company.hrms.dto.VacationScheduleArchiveDTO;
 import uz.company.hrms.dto.VacationScheduleCreateDTO;
 import uz.company.hrms.dto.VacationScheduleResponseDTO;
 import uz.company.hrms.service.VacationScheduleService;
@@ -36,6 +37,11 @@ public class VacationScheduleController {
     @GetMapping("/current-month")
     public List<VacationEmployeeDTO> getCurrentMonthVacationEmployees(){
         return vacationSchedule.getCurrentMonthVacationEmployees();
+    }
+
+    @GetMapping("/archive")
+    public List<VacationScheduleArchiveDTO> getArchiveVacationSchedule(){
+        return vacationSchedule.getArchiveVacationSchedule();
     }
 
     @DeleteMapping("/{id}")

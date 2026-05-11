@@ -1,12 +1,10 @@
 package uz.company.hrms.service.Impl;
 
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uz.company.hrms.dto.EmployeeCreateDTO;
-import uz.company.hrms.dto.EmployeeDeleteDTO;
-import uz.company.hrms.dto.EmployeeResponseDTO;
-import uz.company.hrms.dto.YoungEmployeeDTO;
+import uz.company.hrms.dto.*;
 import uz.company.hrms.entity.Department;
 import uz.company.hrms.entity.Employee;
 import uz.company.hrms.entity.EmployeeArchive;
@@ -175,6 +173,24 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .toList();
     }
 
+
+    @Override
+    @Transactional
+    public List<ArchiveEmployeeDTO> getArchiveEmployee(){
+        return archiveRepository.findAll()
+                .stream()
+                .map(archive->new ArchiveEmployeeDTO(
+                        archive.getId(),
+                        archive.getFullName(),
+                        archive.getBirthDate(),
+                        archive.getEmploymentDate(),
+                        archive.getLeavingDate(),
+                        archive.getDepartmentName(),
+                        archive.getPositionName(),
+                        archive.getRetirementReason()
+                ))
+                .toList();
+    }
 
 
     @Override

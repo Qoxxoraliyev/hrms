@@ -2,6 +2,7 @@ package uz.company.hrms.service.Impl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.company.hrms.dto.EmployeeNameDTO;
+import uz.company.hrms.dto.SickLeaveArchiveDTO;
 import uz.company.hrms.dto.SickLeaveCreateDTO;
 import uz.company.hrms.dto.SickLeaveResponseDTO;
 import uz.company.hrms.entity.Employee;
@@ -85,6 +86,26 @@ public class SickLeaveServiceImpl implements SickLeaveService {
                         employee.getFullName()))
                 .toList();
     }
+
+
+    @Override
+    @Transactional
+    public List<SickLeaveArchiveDTO> getSickLeaveArchive(){
+        return sickLeaveArchiveRepository.findAll()
+                .stream()
+                .map(sickLeaveArchive -> new SickLeaveArchiveDTO(
+                        sickLeaveArchive.getId(),
+                        sickLeaveArchive.getEmployee().getFullName(),
+                        sickLeaveArchive.getStartDate(),
+                        sickLeaveArchive.getEndDate(),
+                        sickLeaveArchive.getDays(),
+                        sickLeaveArchive.getDiseaseName(),
+                        sickLeaveArchive.getYear(),
+                        sickLeaveArchive.getArchivedAt()
+                )).toList();
+    }
+
+
 
     @Override
     @Transactional
