@@ -71,6 +71,20 @@ public class EmployeeController {
         return employeeService.getArchiveEmployee();
     }
 
+    // lavozim va ism familiyasi chiqadi
+    @GetMapping("/staff-table")
+    public List<StaffTableResponseDTO> getStaffTable(){
+        return employeeService.getStaffTable();
+    }
+
+    // bo'lim bo'yicha hodimni lavozimi va ism familiyasini chiqaradi
+    @GetMapping("/staff-table/department")
+    public List<StaffTableResponseDTO> getByDepartment(
+            @RequestParam String departmentName
+    ){
+        return employeeService.getStaffTableByDepartment(departmentName);
+    }
+
 
 
     @GetMapping("filter")

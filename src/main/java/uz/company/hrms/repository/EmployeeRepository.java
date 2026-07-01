@@ -20,5 +20,9 @@ public interface EmployeeRepository extends JpaRepository<Employee,Long>, JpaSpe
 
     List<Employee> findByEmploymentDateAfter(LocalDate date);
 
+    List<Employee> findByDepartment_Name(String departmentName);
 
+    List<Employee> findByStaffPosition_PositionName(String positionName);
+
+    List<Employee> findByFullNameContainingIgnoreCase(String fullName);
 }

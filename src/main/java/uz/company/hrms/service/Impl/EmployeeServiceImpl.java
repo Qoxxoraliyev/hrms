@@ -1,7 +1,6 @@
 package uz.company.hrms.service.Impl;
 
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.company.hrms.dto.*;
@@ -12,6 +11,7 @@ import uz.company.hrms.entity.StaffPosition;
 import uz.company.hrms.enums.NextAttestation;
 import uz.company.hrms.enums.Rank;
 import uz.company.hrms.mapper.EmployeeMapper;
+import uz.company.hrms.mapper.StaffTableMapper;
 import uz.company.hrms.repository.*;
 import uz.company.hrms.service.EmployeeService;
 
@@ -172,6 +172,49 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .map(EmployeeMapper::toDTO)
                 .toList();
     }
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<StaffTableResponseDTO> getStaffTable(){
+        return employeeRepository.findAll()
+                .stream()
+                .map(StaffTableMapper::toDTO)
+                .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<StaffTableResponseDTO> getStaffTableByDepartment(String departmentName){
+        return employeeRepository
+                .findByDepartment_Name(departmentName)
+                .stream()
+                .map(StaffTableMapper::toDTO)
+                .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<StaffTableResponseDTO> getStaffTableByName(String fullName){
+        return employeeRepository
+                .findByFullName(fullName)
+                .stream()
+                .map(StaffTableMapper::toDTO)
+                .toList();
+    }
+
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<StaffTableResponseDTO> getStaffTableByPosition(String positionName){
+        return employeeRepository
+                .findByStaffPosition_PositionName(positionName)
+                .stream()
+                .map(StaffTableMapper::toDTO)
+                .toList();
+    }
+
 
 
     @Override
