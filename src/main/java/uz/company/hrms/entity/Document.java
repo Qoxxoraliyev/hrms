@@ -26,8 +26,8 @@ public class Document {
     private String fileName;
 
     @NotNull
-    @Column(name = "file_url",nullable = false)
-    private String fileUrl;
+    @Column(name = "file_path",nullable = false)
+    private String filePath;
 
     private Long fileSize;
 
@@ -41,11 +41,11 @@ public class Document {
 
     public Document(){}
 
-    public Document(Long id, DocumentType type, String fileName, String fileUrl, Long fileSize, String contentType) {
+    public Document(Long id, DocumentType type, String fileName, String filePath, Long fileSize, String contentType) {
         this.id = id;
         this.type = type;
         this.fileName = fileName;
-        this.fileUrl = fileUrl;
+        this.filePath = filePath;
         this.fileSize = fileSize;
         this.contentType = contentType;
     }
@@ -70,12 +70,12 @@ public class Document {
         this.fileName = fileName;
     }
 
-    public String getFileUrl() {
-        return fileUrl;
+    public String getFilePath() {
+        return filePath;
     }
 
-    public void setFileUrl(String fileUrl) {
-        this.fileUrl = fileUrl;
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 
     public Long getFileSize() {
@@ -94,4 +94,11 @@ public class Document {
         this.contentType = contentType;
     }
 
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
 }

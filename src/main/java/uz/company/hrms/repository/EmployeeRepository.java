@@ -25,4 +25,6 @@ public interface EmployeeRepository extends JpaRepository<Employee,Long>, JpaSpe
     List<Employee> findByStaffPosition_PositionName(String positionName);
 
     List<Employee> findByFullNameContainingIgnoreCase(String fullName);
+
+
 }

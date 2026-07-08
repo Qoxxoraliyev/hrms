@@ -3,6 +3,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.company.hrms.dto.StaffPositionCreateDTO;
 import uz.company.hrms.dto.StaffPositionResponseDTO;
+import uz.company.hrms.dto.VacancyResponseDTO;
 import uz.company.hrms.entity.Department;
 import uz.company.hrms.entity.StaffPosition;
 import uz.company.hrms.mapper.StaffPositionMapper;
@@ -89,6 +90,108 @@ public class StaffPositionServiceImpl implements StaffPositionService {
         }
         staffPositionRepository.delete(staffPosition);
     }
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<VacancyResponseDTO> getVacantPositions(){
+        return staffPositionRepository.findVacantPositions()
+                .stream()
+                .map(staff->new VacancyResponseDTO(
+                        staff.getDepartment().getName(),
+                        staff.getPositionName(),
+                        staff.getTotalSlots(),
+                        staff.getOccupiedSlots(),
+                        staff.getTotalSlots()-staff.getOccupiedSlots()
+                ))
+                .toList();
+    }
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<VacancyResponseDTO> getVacantPositionsByDepartment(String departmentName){
+        return staffPositionRepository.findVacantPositionsByDepartment(departmentName)
+                .stream()
+                .map(staff->new VacancyResponseDTO(
+                        staff.getDepartment().getName(),
+                        staff.getPositionName(),
+                        staff.getTotalSlots(),
+                        staff.getOccupiedSlots(),
+                        staff.getTotalSlots()-staff.getOccupiedSlots()
+                ))
+                .toList();
+    }
+
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<VacancyResponseDTO> getVacantPositionsByPosition(String positionName){
+        return staffPositionRepository.findVacantPositionByPosition(positionName)
+                .stream()
+                .map(staff->new VacancyResponseDTO(
+                        staff.getDepartment().getName(),
+                        staff.getPositionName(),
+                        staff.getTotalSlots(),
+                        staff.getOccupiedSlots(),
+                        staff.getTotalSlots()-staff.getOccupiedSlots()
+                ))
+                .toList();
+    }
+
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<VacancyResponseDTO> getFullPositions(){
+        return staffPositionRepository.findFullPositions()
+                .stream()
+                .map(staff->new VacancyResponseDTO(
+                        staff.getDepartment().getName(),
+                        staff.getPositionName(),
+                        staff.getTotalSlots(),
+                        staff.getOccupiedSlots(),
+                        0
+                ))
+                .toList();
+    }
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<VacancyResponseDTO> getFullPositionsByDepartment(String departmentName){
+        return staffPositionRepository.findFullPositionsByDepartment(departmentName)
+                .stream()
+                .map(staff->new VacancyResponseDTO(
+                        staff.getDepartment().getName(),
+                        staff.getPositionName(),
+                        staff.getTotalSlots(),
+                        staff.getOccupiedSlots(),
+                        0
+                ))
+                .toList();
+    }
+
+
+
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<VacancyResponseDTO> getFullPositionsByPosition(String positionName){
+        return staffPositionRepository.findFullPositionsByPosition(positionName)
+                .stream()
+                .map(staff->new VacancyResponseDTO(
+                        staff.getDepartment().getName(),
+                        staff.getPositionName(),
+                        staff.getTotalSlots(),
+                        staff.getOccupiedSlots(),
+                        0
+                ))
+                .toList();
+    }
+
 
 
 
