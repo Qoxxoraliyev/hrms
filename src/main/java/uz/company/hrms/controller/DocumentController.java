@@ -71,8 +71,8 @@ public class DocumentController {
 
 
     @GetMapping("/search")
-    public ResponseEntity<List<DocumentResponse>> searchByEmployeeFirstName(@RequestParam String firstName){
-        return ResponseEntity.ok(documentService.searchByEmployeeFirstName(firstName));
+    public ResponseEntity<List<DocumentResponse>> searchByEmployeeFullName(@RequestParam String firstName){
+        return ResponseEntity.ok(documentService.searchByEmployeeFullName(firstName));
     }
 
 

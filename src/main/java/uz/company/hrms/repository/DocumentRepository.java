@@ -22,8 +22,8 @@ public interface DocumentRepository extends JpaRepository<Document,Long> {
 
     Optional<Document> findByEmployeeIdAndType(Long employeeId,DocumentType type);
 
-    List<Document> findByEmployee_FirstNameContainingIgnoreCase(String firstName);
+    List<Document> findByEmployee_FullNameContainingIgnoreCase(String fullName);
 
-
+    
 
 }

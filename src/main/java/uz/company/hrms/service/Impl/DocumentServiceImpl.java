@@ -97,6 +97,7 @@ public class DocumentServiceImpl implements DocumentService {
         documentRepository.save(document);
     }
 
+
     @Override
     public List<DocumentResponse> getEmployeeDocuments(Long employeeId){
 
@@ -104,10 +105,11 @@ public class DocumentServiceImpl implements DocumentService {
             throw new ResourceNotFoundException(
                     "Employee not found with id: "+employeeId);
         }
-
         List<Document> documents=documentRepository.findByEmployeeId(employeeId);
         return DocumentMapper.toDTOList(documents);
     }
+
+
 
     @Override
     public long countDocuments(Long employeeId){
@@ -208,8 +210,8 @@ public class DocumentServiceImpl implements DocumentService {
 
 
     @Override
-    public List<DocumentResponse> searchByEmployeeFirstName(String firstName){
-        List<Document> documents=documentRepository.findByEmployee_FirstNameContainingIgnoreCase(firstName);
+    public List<DocumentResponse> searchByEmployeeFullName(String firstName){
+        List<Document> documents=documentRepository.findByEmployee_FullNameContainingIgnoreCase(firstName);
 
         if (documents.isEmpty()){
             throw new ResourceNotFoundException(

@@ -23,6 +23,6 @@ public interface DocumentService {
 
     DocumentResponse getEmployeeDocumentByType(Long employeeId,DocumentType type);
 
-    List<DocumentResponse> searchByEmployeeFirstName(String firstName);
+    List<DocumentResponse> searchByEmployeeFullName(String firstName);
 
 }
