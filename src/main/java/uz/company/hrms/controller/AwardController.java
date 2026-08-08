@@ -1,8 +1,10 @@
 package uz.company.hrms.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uz.company.hrms.dto.AwardCreateDTO;
 import uz.company.hrms.dto.AwardResponseDTO;
+import uz.company.hrms.dto.AwardUpdateDTO;
 import uz.company.hrms.dto.EmployeeNameDTO;
 import uz.company.hrms.service.AwardService;
 
@@ -28,6 +30,20 @@ public class AwardController {
         return awardService.getAll();
     }
 
+
+    @PutMapping("/{id}")
+    public ResponseEntity<AwardResponseDTO> updateAward(@PathVariable Long id,
+                                                        @RequestBody AwardUpdateDTO dto){
+        AwardUpdateDTO updateDTO=new AwardUpdateDTO(
+                id,
+                dto.employeeFullName(),
+                dto.awardCount(),
+                dto.awardType(),
+                dto.awardDate()
+        );
+
+        return ResponseEntity.ok(awardService.updateAward(updateDTO));
+    }
 
     @GetMapping("/employee/name")
     public List<AwardResponseDTO> findByEmployee(@RequestParam String employeeName){

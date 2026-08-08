@@ -4,10 +4,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uz.company.hrms.dto.VacationEmployeeDTO;
-import uz.company.hrms.dto.VacationScheduleArchiveDTO;
-import uz.company.hrms.dto.VacationScheduleCreateDTO;
-import uz.company.hrms.dto.VacationScheduleResponseDTO;
+import uz.company.hrms.dto.*;
 import uz.company.hrms.entity.Department;
 import uz.company.hrms.entity.Employee;
 import uz.company.hrms.entity.VacationSchedule;
@@ -78,6 +75,44 @@ public class VacationScheduleServiceImpl implements VacationScheduleService {
         vacationScheduleRepository.deleteAll();
 
     }
+
+
+    @Override
+    @Transactional
+    public VacationScheduleResponseDTO updateVacationSchedule(
+            VacationScheduleUpdateDTO dto
+    ) {
+
+        VacationSchedule vacationSchedule =
+                vacationScheduleRepository.findById(dto.id())
+                        .orElseThrow(() ->
+                                new RuntimeException("Vacation schedule not found")
+                        );
+
+        Department department = departmentRepository
+                .findByName(dto.departmentName())
+                .orElseThrow(() ->
+                        new RuntimeException("Department not found")
+                );
+
+        Employee employee = employeeRepository
+                .findByFullName(dto.employeeName())
+                .orElseThrow(() ->
+                        new RuntimeException("Employee not found")
+                );
+
+        vacationSchedule.setEmployee(employee);
+        vacationSchedule.setDepartment(department);
+        vacationSchedule.setVacationMonth(dto.vacationMonth());
+
+        VacationSchedule updated =
+                vacationScheduleRepository.save(vacationSchedule);
+
+        return VacationScheduleMapper.toDto(updated);
+    }
+
+
+
 
 
     @Override

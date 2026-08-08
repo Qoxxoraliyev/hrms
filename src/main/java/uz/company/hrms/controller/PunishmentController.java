@@ -1,10 +1,12 @@
 package uz.company.hrms.controller;
 
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uz.company.hrms.dto.EmployeeNameDTO;
 import uz.company.hrms.dto.PunishmentCreateDTO;
 import uz.company.hrms.dto.PunishmentResponseDTO;
+import uz.company.hrms.dto.PunishmentUpdateDTO;
 import uz.company.hrms.service.PunishmentService;
 
 import java.util.List;
@@ -29,6 +31,21 @@ public class PunishmentController {
     public List<PunishmentResponseDTO> getAll(){
         return punishmentService.getAll();
     }
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<PunishmentResponseDTO> updatePunishment(@PathVariable Long id,
+                                                                  @RequestBody PunishmentUpdateDTO dto){
+        PunishmentUpdateDTO updateDTO=new PunishmentUpdateDTO(
+                id,
+                dto.employeeFullName(),
+                dto.punishmentCount(),
+                dto.punishmentType(),
+                dto.punishmentDate()
+        );
+        return ResponseEntity.ok(punishmentService.updatePunishment(updateDTO));
+    }
+
 
     @GetMapping("/employee/name")
     public List<PunishmentResponseDTO> getByEmployeeFullName(@RequestParam String employeeFullName){

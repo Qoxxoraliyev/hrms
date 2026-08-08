@@ -1,9 +1,6 @@
 package uz.company.hrms.service;
 
-import uz.company.hrms.dto.VacationEmployeeDTO;
-import uz.company.hrms.dto.VacationScheduleCreateDTO;
-import uz.company.hrms.dto.VacationScheduleResponseDTO;
-import uz.company.hrms.dto.VacationScheduleArchiveDTO;
+import uz.company.hrms.dto.*;
 
 import java.util.List;
 
@@ -21,5 +18,5 @@ public interface VacationScheduleService {
 
     List<VacationScheduleArchiveDTO> getArchiveVacationSchedule();
 
-
+    VacationScheduleResponseDTO updateVacationSchedule(VacationScheduleUpdateDTO dto);
 }

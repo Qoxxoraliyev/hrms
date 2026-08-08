@@ -1,10 +1,9 @@
 package uz.company.hrms.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import uz.company.hrms.dto.VacationEmployeeDTO;
-import uz.company.hrms.dto.VacationScheduleArchiveDTO;
-import uz.company.hrms.dto.VacationScheduleCreateDTO;
-import uz.company.hrms.dto.VacationScheduleResponseDTO;
+import uz.company.hrms.dto.*;
+import uz.company.hrms.entity.VacationSchedule;
 import uz.company.hrms.service.VacationScheduleService;
 
 import java.util.List;
@@ -23,6 +22,24 @@ public class VacationScheduleController {
     public VacationScheduleResponseDTO createVacationSchedule(@RequestBody VacationScheduleCreateDTO dto){
         return vacationSchedule.createVacationSchedule(dto);
     }
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<VacationScheduleResponseDTO> update(
+            @PathVariable Long id,
+            @RequestBody VacationScheduleUpdateDTO dto
+            ){
+        VacationScheduleUpdateDTO updateDTO=new VacationScheduleUpdateDTO(
+                id,
+                dto.employeeName(),
+                dto.departmentName(),
+                dto.vacationMonth()
+        );
+
+        return ResponseEntity.ok(vacationSchedule.updateVacationSchedule(updateDTO));
+    }
+
+
 
     @GetMapping
     public List<VacationScheduleResponseDTO> getAll(){

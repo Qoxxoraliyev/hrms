@@ -1,5 +1,6 @@
 package uz.company.hrms.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uz.company.hrms.dto.*;
 import uz.company.hrms.enums.Rank;
@@ -53,6 +54,33 @@ public class EmployeeController {
             @RequestParam Integer maxAge){
         return employeeService.filterByAge(minAge,maxAge);
     }
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<EmployeeResponseDTO> updateEmployee(
+            @PathVariable Long id,
+            @RequestBody EmployeeUpdateDTO dto
+    ) {
+
+        EmployeeUpdateDTO updateDTO = new EmployeeUpdateDTO(
+                id,
+                dto.fullName(),
+                dto.rank(),
+                dto.departmentName(),
+                dto.staffPositionName(),
+                dto.birthDate(),
+                dto.address(),
+                dto.employmentDate(),
+                dto.rankAssignedDate(),
+                dto.awardCountFromOffice(),
+                dto.appreciationCountFromTashkent()
+        );
+
+        return ResponseEntity.ok(
+                employeeService.updateEmployee(updateDTO)
+        );
+    }
+
 
     /**
      * yosh xodimlar ro'yhati

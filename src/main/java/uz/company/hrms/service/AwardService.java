@@ -2,6 +2,7 @@ package uz.company.hrms.service;
 
 import uz.company.hrms.dto.AwardCreateDTO;
 import uz.company.hrms.dto.AwardResponseDTO;
+import uz.company.hrms.dto.AwardUpdateDTO;
 import uz.company.hrms.dto.EmployeeNameDTO;
 
 import java.util.List;
@@ -17,5 +18,7 @@ public interface AwardService {
     List<EmployeeNameDTO> getEmployees();
 
     void delete(Long id);
+
+    AwardResponseDTO updateAward(AwardUpdateDTO dto);
 
 }

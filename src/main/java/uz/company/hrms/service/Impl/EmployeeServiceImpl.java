@@ -91,6 +91,115 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
 
+
+    @Override
+    @Transactional
+    public EmployeeResponseDTO updateEmployee(EmployeeUpdateDTO dto) {
+
+        Employee employee = employeeRepository.findById(dto.id())
+                .orElseThrow(() ->
+                        new RuntimeException("Employee not found")
+                );
+
+        StaffPosition oldStaffPosition = employee.getStaffPosition();
+
+        Department newDepartment = departmentRepository
+                .findByName(dto.departmentName())
+                .orElseThrow(() ->
+                        new RuntimeException("Department not found")
+                );
+
+        StaffPosition newStaffPosition =
+                staffPositionRepository
+                        .findByPositionNameAndDepartment_Name(
+                                dto.staffPositionName(),
+                                dto.departmentName()
+                        )
+                        .orElseThrow(() ->
+                                new RuntimeException("Staff position not found")
+                        );
+
+        // Staff position tanlangan departmentga tegishlimi?
+        if (!newStaffPosition.getDepartment().getId()
+                .equals(newDepartment.getId())) {
+
+            throw new RuntimeException(
+                    "Staff position bu department ga tegishli emas"
+            );
+        }
+
+        // Agar staff position o'zgargan bo'lsa
+        if (!oldStaffPosition.getId()
+                .equals(newStaffPosition.getId())) {
+
+            // Yangi shtatda bo'sh joy bormi?
+            if (newStaffPosition.getOccupiedSlots()
+                    >= newStaffPosition.getTotalSlots()) {
+
+                throw new RuntimeException(
+                        "Yangi shtat to'lgan"
+                );
+            }
+
+            // Eski shtatdagi employee sonini kamaytirish
+            if (oldStaffPosition.getOccupiedSlots() > 0) {
+                oldStaffPosition.setOccupiedSlots(
+                        oldStaffPosition.getOccupiedSlots() - 1
+                );
+            }
+
+            // Yangi shtatdagi employee sonini oshirish
+            newStaffPosition.setOccupiedSlots(
+                    newStaffPosition.getOccupiedSlots() + 1
+            );
+
+            // Yangi positionni employee'ga berish
+            employee.setStaffPosition(newStaffPosition);
+        }
+
+        // Employee ma'lumotlarini yangilash
+        employee.setFullName(dto.fullName());
+        employee.setRank(dto.rank());
+        employee.setDepartment(newDepartment);
+        employee.setBirthDate(dto.birthDate());
+        employee.setAddress(dto.address());
+        employee.setEmploymentDate(dto.employmentDate());
+        employee.setRankAssignedDate(dto.rankAssignedDate());
+        employee.setAwardCountFromOffice(
+                dto.awardCountFromOffice()
+        );
+        employee.setAppreciationCountFromTashkent(
+                dto.appreciationCountFromTashkent()
+        );
+
+        // Attestation sanasini qayta hisoblash
+        LocalDate nextDate = calculateNextAttestationDate(
+                dto.rank(),
+                dto.rankAssignedDate()
+        );
+
+        employee.setNextAttestationDate(nextDate);
+
+        if (nextDate == null) {
+
+            employee.setNextAttestationStatus(
+                    NextAttestation.MUDDATSIZ
+            );
+
+        } else {
+
+            employee.setNextAttestationStatus(
+                    NextAttestation.MUDDATLI
+            );
+        }
+
+        Employee updated = employeeRepository.save(employee);
+
+        return EmployeeMapper.toDTO(updated);
+    }
+
+
+
     @Override
     @Transactional(readOnly = true)
     public List<EmployeeResponseDTO> filterByAge(Integer minAge,Integer maxAge){

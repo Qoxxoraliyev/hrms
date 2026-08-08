@@ -2,6 +2,7 @@ package uz.company.hrms.service;
 
 
 import uz.company.hrms.dto.*;
+import uz.company.hrms.entity.VacationSchedule;
 import uz.company.hrms.enums.Rank;
 import uz.company.hrms.service.Impl.StaffPositionServiceImpl;
 
@@ -12,6 +13,8 @@ public interface EmployeeService {
     EmployeeResponseDTO employeeCreateDTO(EmployeeCreateDTO dto);
 
     List<EmployeeResponseDTO> getAll();
+
+    EmployeeResponseDTO updateEmployee(EmployeeUpdateDTO dto);
 
     void deleteEmployee(EmployeeDeleteDTO dto);
 
@@ -36,6 +39,7 @@ public interface EmployeeService {
             Integer minExperience,
             Integer maxExperience
     );
+
 
 
 }

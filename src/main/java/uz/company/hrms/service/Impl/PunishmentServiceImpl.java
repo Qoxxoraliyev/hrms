@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 import uz.company.hrms.dto.EmployeeNameDTO;
 import uz.company.hrms.dto.PunishmentCreateDTO;
 import uz.company.hrms.dto.PunishmentResponseDTO;
+import uz.company.hrms.dto.PunishmentUpdateDTO;
 import uz.company.hrms.entity.Employee;
 import uz.company.hrms.entity.Punishment;
 import uz.company.hrms.mapper.PunishmentMapper;
@@ -26,6 +27,27 @@ public class PunishmentServiceImpl implements PunishmentService {
         this.punishmentRepository = punishmentRepository;
         this.employeeRepository = employeeRepository;
     }
+
+
+    @Override
+    @Transactional
+    public PunishmentResponseDTO updatePunishment(PunishmentUpdateDTO dto){
+        Punishment punishment=punishmentRepository.findById(dto.id())
+                .orElseThrow(()->new RuntimeException("Punishment not found"));
+
+        Employee employee=employeeRepository
+                .findByFullName(dto.employeeFullName())
+                .orElseThrow(()->new RuntimeException("Employee not found"));
+
+        punishment.setEmployee(employee);
+        punishment.setPunishmentCount(dto.punishmentCount());
+        punishment.setPunishmentType(dto.punishmentType());
+        punishment.setPunishmentDate(dto.punishmentDate());
+        Punishment updated=punishmentRepository.save(punishment);
+
+        return PunishmentMapper.toDTO(updated);
+    }
+
 
     @Override
     @Transactional

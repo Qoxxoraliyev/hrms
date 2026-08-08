@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.company.hrms.dto.AwardCreateDTO;
 import uz.company.hrms.dto.AwardResponseDTO;
+import uz.company.hrms.dto.AwardUpdateDTO;
 import uz.company.hrms.dto.EmployeeNameDTO;
 import uz.company.hrms.entity.Award;
 import uz.company.hrms.entity.Employee;
@@ -12,6 +13,7 @@ import uz.company.hrms.repository.AwardRepository;
 import uz.company.hrms.repository.EmployeeRepository;
 import uz.company.hrms.service.AwardService;
 
+import java.security.PublicKey;
 import java.util.List;
 
 @Service
@@ -72,6 +74,27 @@ public class AwardServiceImpl implements AwardService {
                         employee.getFullName()
                 ))
                 .toList();
+    }
+
+
+    @Override
+    @Transactional
+    public AwardResponseDTO updateAward(AwardUpdateDTO dto){
+        Award award=awardRepository.findById(dto.id())
+                .orElseThrow(()->new RuntimeException("Award not found"));
+
+        Employee employee=employeeRepository.findByFullName(dto.employeeFullName())
+                .orElseThrow(()->new RuntimeException("Employee not found"));
+
+
+        award.setEmployee(employee);
+        award.setAwardCount(dto.awardCount());
+        award.setAwardType(dto.awardType());
+        award.setAwardDate(dto.awardDate());
+
+        Award updated=awardRepository.save(award);
+
+        return AwardMapper.toDTO(updated);
     }
 
 
