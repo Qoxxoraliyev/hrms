@@ -50,19 +50,29 @@ public class SickLeaveServiceImpl implements SickLeaveService {
 
     @Override
     @Transactional
-    public void delete(Long id){
-        SickLeave sickLeave=sickLeaveRepository.findById(id)
-                .orElseThrow(()->new RuntimeException("Sick leave not found"));
+    public void delete(Long id) {
 
-        SickLeaveArchive archive=new SickLeaveArchive();
+        SickLeave sickLeave = sickLeaveRepository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException("Sick leave not found")
+                );
+
+        SickLeaveArchive archive = new SickLeaveArchive();
+
         archive.setOriginalId(sickLeave.getId());
         archive.setEmployee(sickLeave.getEmployee());
         archive.setStartDate(sickLeave.getStartDate());
         archive.setEndDate(sickLeave.getEndDate());
         archive.setDays(sickLeave.getDays());
         archive.setDiseaseName(sickLeave.getDiseaseName());
+
+        // MUHIM
+        archive.setYear(sickLeave.getStartDate().getYear());
+
         archive.setArchivedAt(LocalDate.now());
+
         sickLeaveArchiveRepository.save(archive);
+
         sickLeaveRepository.delete(sickLeave);
     }
 

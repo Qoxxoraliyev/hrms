@@ -1,7 +1,6 @@
 package uz.company.hrms.service.Impl;
 
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.company.hrms.dto.*;
