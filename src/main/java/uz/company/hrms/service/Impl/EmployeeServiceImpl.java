@@ -27,14 +27,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final DepartmentRepository departmentRepository;
     private final EmployeeArchiveRepository archiveRepository;
     private final StaffPositionRepository staffPositionRepository;
-    private final AwardRepository awardRepository;
 
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository, DepartmentRepository departmentRepository, EmployeeArchiveRepository archiveRepository, StaffPositionRepository staffPositionRepository, AwardRepository awardRepository) {
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository, DepartmentRepository departmentRepository, EmployeeArchiveRepository archiveRepository, StaffPositionRepository staffPositionRepository) {
         this.employeeRepository = employeeRepository;
         this.departmentRepository = departmentRepository;
         this.archiveRepository = archiveRepository;
         this.staffPositionRepository = staffPositionRepository;
-        this.awardRepository = awardRepository;
+
     }
 
     @Override
@@ -403,8 +402,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             archiveRepository.save(archive);
         }
 
-        // Employee'ga bog'langan awardlarni avval o'chiramiz
-        awardRepository.deleteByEmployee(employee);
+
 
         // Keyin employee'ni o'chiramiz
         employeeRepository.delete(employee);

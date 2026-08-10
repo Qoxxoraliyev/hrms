@@ -124,4 +124,12 @@ public class Pensioner {
     public void setRetirementReason(RetirementReason retirementReason) {
         this.retirementReason = retirementReason;
     }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
 }

@@ -112,26 +112,64 @@ public class Employee {
     foreignKey = @ForeignKey(name = "fk_employee_user"))
     private User user;
 
-    @OneToMany(mappedBy ="employee",fetch = FetchType.LAZY)
-    private List<Document> documents=new ArrayList<>();
+    @OneToMany(
+            mappedBy = "employee",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<Document> documents = new ArrayList<>();
 
-    @OneToMany(mappedBy = "employee",fetch = FetchType.LAZY)
-    private List<VacationSchedule> vacationSchedules=new ArrayList<>();
+    @OneToMany(
+            mappedBy = "employee",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<VacationSchedule> vacationSchedules = new ArrayList<>();
 
-    @OneToMany(mappedBy = "employee",fetch = FetchType.LAZY)
-    private List<SickLeave> sickLeaves=new ArrayList<>();
 
-    @OneToMany(mappedBy = "employee",fetch = FetchType.LAZY)
-    private List<Pensioner> pensioners=new ArrayList<>();
+    @OneToMany(
+            mappedBy = "employee",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<SickLeave> sickLeaves = new ArrayList<>();
 
-    @OneToMany(mappedBy = "employee",fetch = FetchType.LAZY)
-    private List<DismissedEmployee> dismissedEmployees=new ArrayList<>();
 
-    @OneToMany(mappedBy = "employee",fetch = FetchType.LAZY)
-    private List<Award> awards=new ArrayList<>();
+    @OneToMany(
+            mappedBy = "employee",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<Pensioner> pensioners = new ArrayList<>();
 
-    @OneToMany(mappedBy = "employee",fetch = FetchType.LAZY)
-    private List<Punishment> punishments=new ArrayList<>();
+    @OneToMany(
+            mappedBy = "employee",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<DismissedEmployee> dismissedEmployees = new ArrayList<>();
+
+
+    @OneToMany(
+            mappedBy = "employee",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<Award> awards = new ArrayList<>();
+
+    @OneToMany(
+            mappedBy = "employee",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<Punishment> punishments = new ArrayList<>();
 
     public Employee(){}
 
