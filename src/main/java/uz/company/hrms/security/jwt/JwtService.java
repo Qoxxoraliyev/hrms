@@ -78,18 +78,19 @@ public class JwtService {
         return resolver.apply(parseClaims(token));
    }
 
-   private Claims parseClaims(String token){
+    private Claims parseClaims(String token) {
         try {
             return Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Invalid token: " + e.getMessage());
         }
-        catch (Exception e){
-            throw new RuntimeException("Invalid token");
-        }
-   }
+    }
 
    public boolean isValid(String token, UserDetails userDetails){
         String email=extractEmail(token);
