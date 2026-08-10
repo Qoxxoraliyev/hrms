@@ -58,19 +58,34 @@ public class AuthService {
     }
 
     // refresh
-    public AuthResponse refresh(String refreshToken){
-        String email=jwtService.extractEmail(refreshToken);
+    public AuthResponse refresh(String refreshToken) {
 
-        User user=userRepository.findByEmail(email)
-                .orElseThrow(()->new UsernameNotFoundException("User not found"));
+        if (refreshToken == null || refreshToken.isBlank()) {
+            throw new RuntimeException("Refresh token required");
+        }
 
-        if (!jwtService.isValid(refreshToken,new UsersDetails(user))){
+        String type = jwtService.extractTokenType(refreshToken);
+
+        if (!"REFRESH".equals(type)) {
+            throw new RuntimeException("Invalid token type");
+        }
+
+        String email = jwtService.extractEmail(refreshToken);
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        if (!jwtService.isValid(refreshToken, new UsersDetails(user))) {
             throw new RuntimeException("Invalid refresh token");
         }
 
-        String newAccess=jwtService.generateAccessToken(email,user.getRole().name());
+        String newAccess =
+                jwtService.generateAccessToken(
+                        email,
+                        user.getRole().name()
+                );
 
-        return new AuthResponse(newAccess,refreshToken);
+        return new AuthResponse(newAccess, refreshToken);
     }
 
 

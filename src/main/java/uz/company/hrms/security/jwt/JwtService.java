@@ -24,31 +24,43 @@ public class JwtService {
         this.key= Keys.hmacShaKeyFor(secret.getBytes());
     }
 
-   public String generateAccessToken(String email, String role){
-       Map<String, Object> claims=new HashMap<>();
-       claims.put("role",role);
+    public String generateAccessToken(String email, String role) {
 
-       return Jwts.builder()
-               .setClaims(claims)
-               .setSubject(email)
-               .setIssuedAt(new Date())
-               .setExpiration(new Date(System.currentTimeMillis()+1000L*60*60*24))
-               .signWith(key, SignatureAlgorithm.HS256)
-               .compact();
-   }
-
-   public String generateRefreshToken(String email,String role){
-        Map<String,Object> claims=new HashMap<>();
-        claims.put("role",role);
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("role", role);
+        claims.put("type", "ACCESS");
 
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(email)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis()+1000L*60*60*24*7))
-                .signWith(key,SignatureAlgorithm.HS256)
+                .setExpiration(
+                        new Date(System.currentTimeMillis() + 1000L * 60 * 60 * 24)
+                )
+                .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
-   }
+    }
+
+    public String extractTokenType(String token) {
+        return extractClaim(token, claims -> claims.get("type", String.class));
+    }
+
+    public String generateRefreshToken(String email, String role) {
+
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("role", role);
+        claims.put("type", "REFRESH");
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(email)
+                .setIssuedAt(new Date())
+                .setExpiration(
+                        new Date(System.currentTimeMillis() + 1000L * 60 * 60 * 24 * 7)
+                )
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
+    }
 
    public String extractEmail(String token){
         return extractClaim(token,Claims::getSubject);
