@@ -3,6 +3,7 @@ package uz.company.hrms.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import uz.company.hrms.entity.Award;
+import uz.company.hrms.entity.Employee;
 
 import java.util.List;
 
@@ -10,5 +11,7 @@ import java.util.List;
 public interface AwardRepository extends JpaRepository<Award,Long> {
 
     List<Award> findByEmployee_FullName(String employeeFullName);
+
+    void deleteByEmployee(Employee employee);
 
 }

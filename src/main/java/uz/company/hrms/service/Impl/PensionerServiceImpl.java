@@ -27,17 +27,21 @@ public class PensionerServiceImpl implements PensionerService {
 
     @Override
     @Transactional
-    public PensionerResponseDTO createPensioner(PensionerCreateDTO dto){
-        Department department=departmentRepository.findByName(dto.departmentName())
-                .orElseThrow(()->new RuntimeException("Department not found"));
+    public PensionerResponseDTO createPensioner(PensionerCreateDTO dto) {
+        Department department = departmentRepository.findByName(dto.departmentName())
+                .orElseThrow(() -> new RuntimeException("Department not found"));
 
-        Pensioner pensioner=new Pensioner();
+        Pensioner pensioner = new Pensioner();
+
         pensioner.setBirthDate(dto.birthDate());
         pensioner.setFullName(dto.fullName());
         pensioner.setPhoneNumber(dto.phoneNumber());
+        pensioner.setRetirementDate(dto.retirementDate());
         pensioner.setRetirementReason(dto.retirementReason());
         pensioner.setDepartment(department);
-        Pensioner saved=pensionerRepository.save(pensioner);
+
+        Pensioner saved = pensionerRepository.save(pensioner);
+
         return PensionerMapper.toDTO(saved);
     }
 

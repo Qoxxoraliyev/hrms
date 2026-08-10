@@ -27,12 +27,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final DepartmentRepository departmentRepository;
     private final EmployeeArchiveRepository archiveRepository;
     private final StaffPositionRepository staffPositionRepository;
+    private final AwardRepository awardRepository;
 
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository, DepartmentRepository departmentRepository, EmployeeArchiveRepository archiveRepository, StaffPositionRepository staffPositionRepository) {
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository, DepartmentRepository departmentRepository, EmployeeArchiveRepository archiveRepository, StaffPositionRepository staffPositionRepository, AwardRepository awardRepository) {
         this.employeeRepository = employeeRepository;
         this.departmentRepository = departmentRepository;
         this.archiveRepository = archiveRepository;
         this.staffPositionRepository = staffPositionRepository;
+        this.awardRepository = awardRepository;
     }
 
     @Override
@@ -356,31 +358,55 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     @Transactional
-    public void deleteEmployee(EmployeeDeleteDTO dto){
-        Employee employee=employeeRepository.findByFullName(dto.employeeFullName())
-                .orElseThrow(()->new RuntimeException("Employee not found"));
+    public void deleteEmployee(EmployeeDeleteDTO dto) {
 
-        StaffPosition staffPosition=employee.getStaffPosition();
+        Employee employee = employeeRepository
+                .findByFullName(dto.employeeFullName())
+                .orElseThrow(() -> new RuntimeException("Employee not found"));
 
-        if (staffPosition.getOccupiedSlots()>0){
-            staffPosition.setOccupiedSlots(staffPosition.getOccupiedSlots()-1);
+        StaffPosition staffPosition = employee.getStaffPosition();
+
+        if (staffPosition.getOccupiedSlots() > 0) {
+            staffPosition.setOccupiedSlots(
+                    staffPosition.getOccupiedSlots() - 1
+            );
         }
 
-        if (Boolean.TRUE.equals(dto.archive())){
-            EmployeeArchive archive=new EmployeeArchive();
+        if (Boolean.TRUE.equals(dto.archive())) {
+
+            EmployeeArchive archive = new EmployeeArchive();
+
             archive.setOldEmployeeId(employee.getId());
             archive.setFullName(employee.getFullName());
             archive.setBirthDate(employee.getBirthDate());
             archive.setEmploymentDate(employee.getEmploymentDate());
-            archive.setLeavingDate(employee.getEmploymentDate());
-            archive.setDepartmentName(employee.getDepartment().getName());
-            archive.setPositionName(employee.getStaffPosition().getPositionName());
-            archive.setRetirementReason(dto.retirementReason());
-            String experience=calculateExperience(employee.getEmploymentDate());
+
+            archive.setLeavingDate(LocalDate.now());
+
+            archive.setDepartmentName(
+                    employee.getDepartment().getName()
+            );
+
+            archive.setPositionName(
+                    employee.getStaffPosition().getPositionName()
+            );
+
+            archive.setRetirementReason(
+                    dto.retirementReason()
+            );
+
+            String experience =
+                    calculateExperience(employee.getEmploymentDate());
+
             archive.setExperience(experience);
+
             archiveRepository.save(archive);
         }
 
+        // Employee'ga bog'langan awardlarni avval o'chiramiz
+        awardRepository.deleteByEmployee(employee);
+
+        // Keyin employee'ni o'chiramiz
         employeeRepository.delete(employee);
     }
 
