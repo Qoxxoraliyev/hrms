@@ -73,7 +73,8 @@ public class EmployeeController {
                 dto.employmentDate(),
                 dto.rankAssignedDate(),
                 dto.awardCountFromOffice(),
-                dto.appreciationCountFromTashkent()
+                dto.appreciationCountFromTashkent(),
+                dto.phoneNumber()
         );
 
         return ResponseEntity.ok(
