@@ -64,28 +64,39 @@ public class AuthService {
             throw new RuntimeException("Refresh token required");
         }
 
+        if (blacklistService.isBlacklisted(refreshToken)) {
+            throw new RuntimeException("Refresh token is blacklisted");
+        }
+
         String type = jwtService.extractTokenType(refreshToken);
 
         if (!"REFRESH".equals(type)) {
-            throw new RuntimeException("Invalid token type");
+            throw new RuntimeException("Invalid refresh token type");
         }
 
         String email = jwtService.extractEmail(refreshToken);
 
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                .orElseThrow(() ->
+                        new UsernameNotFoundException("User not found")
+                );
 
-        if (!jwtService.isValid(refreshToken, new UsersDetails(user))) {
-            throw new RuntimeException("Invalid refresh token");
+        UsersDetails userDetails = new UsersDetails(user);
+
+        if (!jwtService.isValid(refreshToken, userDetails)) {
+            throw new RuntimeException("Invalid or expired refresh token");
         }
 
-        String newAccess =
+        String newAccessToken =
                 jwtService.generateAccessToken(
-                        email,
+                        user.getEmail(),
                         user.getRole().name()
                 );
 
-        return new AuthResponse(newAccess, refreshToken);
+        return new AuthResponse(
+                newAccessToken,
+                refreshToken
+        );
     }
 
 

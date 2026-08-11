@@ -17,5 +17,6 @@ public record EmployeeUpdateDTO(
         LocalDate employmentDate,
         LocalDate rankAssignedDate,
         Integer awardCountFromOffice,
-        Integer appreciationCountFromTashkent
+        Integer appreciationCountFromTashkent,
+        String phoneNumber
 ) {}

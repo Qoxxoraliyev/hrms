@@ -12,6 +12,7 @@ public class EmployeeMapper {
         employee.setRank(dto.rank());
         employee.setBirthDate(dto.birthDate());
         employee.setAddress(dto.address());
+        employee.setPhoneNumber(dto.phoneNumber());
         employee.setEmploymentDate(dto.employmentDate());
         employee.setRankAssignedDate(dto.rankAssignedDate());
         employee.setAwardCountFromOffice(dto.awardCountFromOffice());
@@ -28,6 +29,7 @@ public class EmployeeMapper {
                 employee.getStaffPosition().getPositionName(),
                 employee.getBirthDate(),
                 employee.getAddress(),
+                employee.getPhoneNumber(),
                 employee.getEmploymentDate(),
                 employee.getRankAssignedDate(),
                 employee.getAwardCountFromOffice(),

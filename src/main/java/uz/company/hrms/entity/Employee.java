@@ -63,6 +63,15 @@ public class Employee {
     @Column(name = "address",nullable = false,length = 255)
     private String address;
 
+
+    @NotBlank(message = "Phone number is required")
+    @Pattern(
+            regexp = "^\\+998\\d{9}$",
+            message = "Phone number must be in format +998XXXXXXXXX"
+    )
+    @Column(name = "phone_number", nullable = false, length = 13)
+    private String phoneNumber;
+
     /**
      * Ishga kirgan sana
      * Shu sanadan boshlab staj hisoblanadi
@@ -182,7 +191,7 @@ public class Employee {
     }
 
 
-    public Employee(Long id, String fullName, Rank rank, Department department, StaffPosition staffPosition, LocalDate birthDate, String address, LocalDate employmentDate, LocalDate rankAssignedDate, Integer awardCountFromOffice, Integer appreciationCountFromTashkent, LocalDate nextAttestationDate, NextAttestation nextAttestationStatus, User user, List<Document> documents, List<VacationSchedule> vacationSchedules, List<SickLeave> sickLeaves, List<Pensioner> pensioners, List<DismissedEmployee> dismissedEmployees, List<Award> awards, List<Punishment> punishments, LocalDate createdAt) {
+    public Employee(Long id, String fullName, Rank rank, Department department, StaffPosition staffPosition, LocalDate birthDate, String address, String phoneNumber, LocalDate employmentDate, LocalDate rankAssignedDate, Integer awardCountFromOffice, Integer appreciationCountFromTashkent, LocalDate nextAttestationDate, NextAttestation nextAttestationStatus, User user, List<Document> documents, List<VacationSchedule> vacationSchedules, List<SickLeave> sickLeaves, List<Pensioner> pensioners, List<DismissedEmployee> dismissedEmployees, List<Award> awards, List<Punishment> punishments, LocalDate createdAt) {
         this.id = id;
         this.fullName = fullName;
         this.rank = rank;
@@ -190,6 +199,7 @@ public class Employee {
         this.staffPosition = staffPosition;
         this.birthDate = birthDate;
         this.address = address;
+        this.phoneNumber = phoneNumber;
         this.employmentDate = employmentDate;
         this.rankAssignedDate = rankAssignedDate;
         this.awardCountFromOffice = awardCountFromOffice;
@@ -379,4 +389,11 @@ public class Employee {
         this.staffPosition = staffPosition;
     }
 
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 }

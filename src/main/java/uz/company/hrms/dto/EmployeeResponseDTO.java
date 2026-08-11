@@ -13,6 +13,7 @@ public record EmployeeResponseDTO(
         String staffPositionName,
         LocalDate birthDate,
         String address,
+        String phoneNumber,
         LocalDate employmentDate,
         LocalDate rankAssignedDate,
         Integer awardCountFromOffice,

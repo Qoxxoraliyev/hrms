@@ -41,9 +41,6 @@ public class JwtService {
                 .compact();
     }
 
-    public String extractTokenType(String token) {
-        return extractClaim(token, claims -> claims.get("type", String.class));
-    }
 
     public String generateRefreshToken(String email, String role) {
 
@@ -60,6 +57,10 @@ public class JwtService {
                 )
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
+    }
+
+    public String extractTokenType(String token) {
+        return extractClaim(token, claims -> claims.get("type", String.class));
     }
 
    public String extractEmail(String token){

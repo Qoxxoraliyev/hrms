@@ -23,64 +23,87 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private final UserDetailsService userDetailsService;
     private final TokenBlacklistService blacklistService;
 
-    public JwtAuthFilter(JwtService jwtService, UserDetailsService userDetailsService, TokenBlacklistService blacklistService) {
+    public JwtAuthFilter(
+            JwtService jwtService,
+            UserDetailsService userDetailsService,
+            TokenBlacklistService blacklistService
+    ) {
         this.jwtService = jwtService;
         this.userDetailsService = userDetailsService;
         this.blacklistService = blacklistService;
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain)
-            throws ServletException, IOException {
+    protected boolean shouldNotFilter(HttpServletRequest request) {
 
-        final String header = request.getHeader("Authorization");
+        String path = request.getServletPath();
+
+        return path.equals("/api/auth/login")
+                || path.equals("/api/auth/register")
+                || path.equals("/api/auth/refresh");
+    }
+
+    @Override
+    protected void doFilterInternal(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain filterChain
+    ) throws ServletException, IOException {
+
+        String header = request.getHeader("Authorization");
 
         if (header == null || !header.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        final String token = header.substring(7);
+        String token = header.substring(7);
 
         if (blacklistService.isBlacklisted(token)) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token is blacklisted");
+            response.sendError(
+                    HttpServletResponse.SC_UNAUTHORIZED,
+                    "Token is blacklisted"
+            );
             return;
         }
-
-        String email;
 
         try {
-            email = jwtService.extractEmail(token);
-        } catch (Exception e) {
-            filterChain.doFilter(request, response);
-            return;
-        }
 
-        if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            String email = jwtService.extractEmail(token);
 
-            UsersDetails usersDetails =
-                    (UsersDetails) userDetailsService.loadUserByUsername(email);
+            if (email != null &&
+                    SecurityContextHolder
+                            .getContext()
+                            .getAuthentication() == null) {
 
-            if (jwtService.isValid(token, usersDetails)) {
-                UsernamePasswordAuthenticationToken auth =
-                        new UsernamePasswordAuthenticationToken(
-                                usersDetails,
-                                null,
-                                usersDetails.getAuthorities()
-                        );
+                UsersDetails userDetails =
+                        (UsersDetails) userDetailsService
+                                .loadUserByUsername(email);
 
-                auth.setDetails(
-                        new WebAuthenticationDetailsSource().buildDetails(request)
-                );
+                if (jwtService.isValid(token, userDetails)) {
 
-                SecurityContextHolder.getContext().setAuthentication(auth);
+                    UsernamePasswordAuthenticationToken authentication =
+                            new UsernamePasswordAuthenticationToken(
+                                    userDetails,
+                                    null,
+                                    userDetails.getAuthorities()
+                            );
+
+                    authentication.setDetails(
+                            new WebAuthenticationDetailsSource()
+                                    .buildDetails(request)
+                    );
+
+                    SecurityContextHolder
+                            .getContext()
+                            .setAuthentication(authentication);
+                }
             }
+
+        } catch (Exception e) {
+            // JWT invalid bo'lsa authentication o'rnatilmaydi
         }
 
         filterChain.doFilter(request, response);
     }
-
-
 }

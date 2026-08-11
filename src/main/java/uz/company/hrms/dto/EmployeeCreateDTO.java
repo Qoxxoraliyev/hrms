@@ -36,5 +36,8 @@ public record EmployeeCreateDTO(
         Integer awardCountFromOffice,
 
         @NotNull
-        Integer appreciationCountFromTashkent
+        Integer appreciationCountFromTashkent,
+
+        @NotNull
+        String phoneNumber
 ) {}

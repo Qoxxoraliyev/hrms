@@ -65,6 +65,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setStaffPosition(staffPosition);
         employee.setBirthDate(dto.birthDate());
         employee.setAddress(dto.address());
+        employee.setPhoneNumber(dto.phoneNumber());
         employee.setEmploymentDate(dto.employmentDate());
         employee.setRankAssignedDate(dto.rankAssignedDate());
         employee.setAwardCountFromOffice(dto.awardCountFromOffice());
@@ -164,6 +165,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setDepartment(newDepartment);
         employee.setBirthDate(dto.birthDate());
         employee.setAddress(dto.address());
+        employee.setPhoneNumber(dto.phoneNumber());
         employee.setEmploymentDate(dto.employmentDate());
         employee.setRankAssignedDate(dto.rankAssignedDate());
         employee.setAwardCountFromOffice(
